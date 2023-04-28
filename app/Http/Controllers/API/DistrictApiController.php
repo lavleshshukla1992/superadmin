@@ -15,9 +15,12 @@ class DistrictApiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return new DistrictCollection(District::all('id','name','state_id','status'));
+        $stateId = $request->get('state_id');
+        $districtList = District::where('state_id',$stateId)->select('id','name','state_id','status')->get();
+        return response()->json(['status_code' => 200,'success' => true,"message" => "District List Loaded successfully", 'data'=>new DistrictCollection($districtList)]);
+
     }
 
     /**

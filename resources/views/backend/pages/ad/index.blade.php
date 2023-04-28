@@ -65,8 +65,8 @@
                                                 <img src="{{ asset('uploads//') }}/{{ !empty($ad['ad_media'])?$ad['ad_media']:'no-image.png' }}" alt="" height="70" width="70">
                                             </td>
                                             <td>{{ $ad['ad_link'] }}</td>
-                                            <td>{{ $ad['ad_from_dt'] }}</td>
-                                            <td>{{ $ad['ad_to_dt'] }}</td>
+                                            <td>{{ $ad['ad_from_dt'] ?? ''}}</td>
+                                            <td>{{ $ad['ad_to_dt'] ?? ''}}</td>
                                             <td>{{ $ad['ad_type'] }}</td>
                                         </tr>
                                     @endforeach

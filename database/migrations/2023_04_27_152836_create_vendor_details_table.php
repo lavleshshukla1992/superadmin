@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('vendor_details', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->nullable();
+            $table->uuid('uid')->nullable();
             $table->string('vendor_first_name')->nullable();
             $table->string('vendor_last_name')->nullable();
             $table->string('parent_first_name')->nullable();
@@ -29,9 +29,10 @@ return new class extends Migration
             $table->string('current_state')->nullable();
             $table->string('current_district')->nullable();
             $table->string('current_pincode')->nullable();
+            $table->string('mobile_no')->nullable();
 
             $table->string('municipality_panchayat')->nullable();
-            $table->integer('police_station')->nullable();
+            $table->string('police_station')->nullable();
 
             $table->tinyInteger('is_current_add_and_birth_add_is_same')->nullable();
             
@@ -52,8 +53,11 @@ return new class extends Migration
             $table->text('membership_image',500)->nullable();
             $table->text('cov_image',500)->nullable();
             $table->text('lor_image',500)->nullable();
+            $table->text('shop_image',500)->nullable();
             $table->text('password',500)->nullable();
-            $table->integer('status',5)->nullable();
+            $table->bigInteger('status',5)->nullable();
+            $table->bigInteger('user_role')->nullable();
+            $table->tinyInteger('mobile_no_verification_status')->nullable();
             
             $table->softDeletes();
             $table->timestamps();

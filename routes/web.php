@@ -47,7 +47,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/password/reset/submit', 'Backend\Auth\ForgetPasswordController@reset')->name('admin.password.update');
 
     // Ads
-    Route::resource('ad', 'Backend\AdController', ['names' => 'admin.ad'])->middleware('auth');
+    Route::resource('ad', 'Backend\AdController', ['names' => 'admin.ad']);
     Route::resource('country', 'CountryController');
     Route::resource('state', 'StateController');
     Route::resource('district', 'DistrictController');

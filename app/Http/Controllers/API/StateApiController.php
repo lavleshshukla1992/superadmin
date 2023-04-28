@@ -18,7 +18,8 @@ class StateApiController extends Controller
      */
     public function index()
     {
-        return new StateCollection(State::all('id','name'));
+        return response()->json(['status_code' => 200,'success' => true,"message" => "State List Loaded successfully", 'data'=> new StateCollection(State::all('id','name','country_id'))]);
+
     }
 
     /**

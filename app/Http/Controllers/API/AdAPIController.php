@@ -16,6 +16,6 @@ class AdAPIController extends Controller
      */
     public function __invoke(Request $request)
     {
-        return AdsService::getActiveAds();
+       return response()->json(['status_code' => 200,'success' => true,"message" => "Ads List Loaded successfully", 'data'=>AdsService::getActiveAds()]);
     }
 }

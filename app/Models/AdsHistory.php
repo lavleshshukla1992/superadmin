@@ -9,7 +9,7 @@ class AdsHistory extends Model
 {
     use HasFactory;
 
-    public $table = 'ads_history';
+    public $table = 'ads';
 
     public $fillable = [
         'ad_sr_no',

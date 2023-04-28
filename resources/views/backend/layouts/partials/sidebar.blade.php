@@ -122,14 +122,14 @@
                     @if ($usr->can('category.create') || $usr->can('category.view') ||  $usr->can('category.edit') ||  $usr->can('category.delete'))
                         <li>
                             <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
-                                Category
+                                Marketplace
                             </span></a>
                             <ul class="collapse {{ Route::is('categories.create') || Route::is('categories.index') || Route::is('categories.edit') || Route::is('categories.show') ? 'in' : '' }}">
                                 @if ($usr->can('category.create'))
-                                    <li class="{{ Route::is('categories.create')  ? 'active' : '' }}"><a href="{{ route('categories.create') }}">Add Category</a></li>
+                                    <li class="{{ Route::is('categories.create')  ? 'active' : '' }}"><a href="{{ route('categories.create') }}">Add Marketplace</a></li>
                                 @endif
                                 @if ($usr->can('category.view'))
-                                    <li class="{{ Route::is('categories.index')  || Route::is('categories.edit') ? 'active' : '' }}"><a href="{{ route('categories.index') }}"> Category List</a></li>
+                                    <li class="{{ Route::is('categories.index')  || Route::is('categories.edit') ? 'active' : '' }}"><a href="{{ route('categories.index') }}"> Marketplace</a></li>
                                 @endif
                             </ul>
                         </li>
@@ -137,14 +137,29 @@
                     @if ($usr->can('sub_category.create') || $usr->can('sub_category.view') ||  $usr->can('sub_category.edit') ||  $usr->can('sub_category.delete'))
                         <li>
                             <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
-                                Sub Category
+                                Vending
                             </span></a>
                             <ul class="collapse {{ Route::is('sub-categories.create') || Route::is('sub-categories.index') || Route::is('sub-categories.edit') || Route::is('sub-categories.show') ? 'in' : '' }}">
                                 @if ($usr->can('sub_category.create'))
-                                    <li class="{{ Route::is('sub-categories.create')  ? 'active' : '' }}"><a href="{{ route('sub-categories.create') }}">Add Sub Category</a></li>
+                                    <li class="{{ Route::is('sub-categories.create')  ? 'active' : '' }}"><a href="{{ route('sub-categories.create') }}">Vending</a></li>
                                 @endif
                                 @if ($usr->can('sub_category.view'))
-                                    <li class="{{ Route::is('sub-categories.index')  || Route::is('sub-categories.edit') ? 'active' : '' }}"><a href="{{ route('sub-categories.index') }}"> Sub Category List</a></li>
+                                    <li class="{{ Route::is('sub-categories.index')  || Route::is('sub-categories.edit') ? 'active' : '' }}"><a href="{{ route('sub-categories.index') }}"> Vending List</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+                    @if ($usr->can('sub_category.create') || $usr->can('sub_category.view') ||  $usr->can('sub_category.edit') ||  $usr->can('sub_category.delete'))
+                        <li>
+                            <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
+                                Membership Details
+                            </span></a>
+                            <ul class="collapse {{ Route::is('sub-categories.create') || Route::is('sub-categories.index') || Route::is('sub-categories.edit') || Route::is('sub-categories.show') ? 'in' : '' }}">
+                                @if ($usr->can('sub_category.create'))
+                                    <li class="{{ Route::is('sub-categories.create')  ? 'active' : '' }}"><a href="{{ route('sub-categories.create') }}">View / Apply</a></li>
+                                @endif
+                                @if ($usr->can('sub_category.view'))
+                                    <li class="{{ Route::is('sub-categories.index')  || Route::is('sub-categories.edit') ? 'active' : '' }}"><a href="{{ route('sub-categories.index') }}">Subscription</a></li>
                                 @endif
                             </ul>
                         </li>

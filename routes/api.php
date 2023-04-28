@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\API\OTPController;
 use App\Http\Controllers\VendorApiController;
+use App\Http\Controllers\API\StateApiController;
+use App\Http\Controllers\API\PincodeAPIController;
+use App\Http\Controllers\API\DistrictApiController;
 use App\Http\Controllers\API\VendorDetailController;
 
 /*
@@ -43,18 +46,17 @@ Route::post('resend-otp',[OTPController::class,'reSendOTP']);
 
 Route::post('verify-otp',[OTPController::class,'verifyOTP']);
 
+Route::post('pincode-list',[PincodeAPIController::class,'getPinCodeList']);
+
 
 Route::apiResource('countries',CountryApiController::class)->only([
     'index', 'show'
 ]);
 
-Route::apiResource('states',StateApiController::class)->only([
-    'index', 'show'
-]);
+Route::get('state-list',[StateApiController::class,'index']);
 
-Route::apiResource('district',DistrictApiController::class)->only([
-    'index', 'show'
-]);
+Route::post('district-list',[DistrictApiController::class,'index']);
+
 
 Route::apiResource('categories',CategoryApiController::class)->only([
     'index', 'show'

@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-    Category - Admin Panel
+Marketplace - Admin Panel
 @endsection
 
 @section('styles')
@@ -19,10 +19,10 @@
         <div class="row align-items-center">
             <div class="col-sm-6">
                 <div class="breadcrumbs-area clearfix">
-                    <h4 class="page-title pull-left">Category</h4>
+                    <h4 class="page-title pull-left">Marketplace</h4>
                     <ul class="breadcrumbs pull-left">
                         <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li><span>All Category</span></li>
+                        <li><span>All Marketplace</span></li>
                     </ul>
                 </div>
             </div>
@@ -39,7 +39,7 @@
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="header-title float-left">Category List</h4>
+                        <h4 class="header-title float-left">Marketplace List</h4>
                         <div class="clearfix"></div>
                         <div class="data-tables">
                             @include('backend.layouts.partials.messages')

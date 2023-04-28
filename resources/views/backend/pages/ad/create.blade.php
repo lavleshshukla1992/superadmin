@@ -123,6 +123,8 @@
                                                 <button type="sbmit" id="savebtn{{ $i }}"
                                                     class="btn btn-primary mt-4 pr-4 pl-4 {{ !empty($ads[$i]['ad_type']) ? 'hide' : ''}} savebtn">SAVE</button>
 
+                                                <a href="{{route('admin.ad.create')}}" type="button" class="btn btn-danger mt-4 pr-4 pl-4 "> Cancel</a>
+
                                                 <a class="btn btn-danger text-white deletebtn hide"
                                                     href="{{ route('admin.ad.destroy', $ads[$i]['id'] ?? '') }}"
                                                     onclick="event.preventDefault(); document.getElementById('delete-form-{{ $i }}').submit();">

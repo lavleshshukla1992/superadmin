@@ -28,7 +28,7 @@ class VendorServices
         $input = $request->all();
         $input['uid'] = $uuid;
 
-        $input['name'] = $input['first_name'] .' '.$input['last_name'];
+        // $input['name'] = $input['vendor_first_name'] .' '.$input['vendor_last_name'];
 
         if (isset($input['profile_image_name'])) 
         {
@@ -105,7 +105,7 @@ class VendorServices
         $uuid = $request->get('uid',3);
         $input['uid'] = $uuid;
 
-        $input['name'] = $input['first_name'] .' '.$input['last_name'];
+        // $input['name'] = $input['first_name'] .' '.$input['last_name'];
         return $input;
     }
 
