@@ -47,26 +47,43 @@
                             <table id="dataTable" class="text-center">
                                 <thead class="bg-light text-capitalize">
                                     <tr>
-                                        <th width="5%">Sl</th>
-                                        <th width="5%">Name</th>
-                                        <th width="5%">Media</th>
-                                        <th width="5%">Link</th>
-                                        <th width="5%">From</th>
-                                        <th width="5%">To</th>
-                                        <th width="5%">Ads Type</th>
+                                        <th width="1%">Sl</th>
+                                        <th width="1%">Ad Pos</th>
+                                        <th width="1%">Name</th>
+                                        <th width="1%">Media</th>
+                                        <th width="1%">Link</th>
+                                        <th width="1%">From</th>
+                                        <th width="1%">To</th>
+                                        <th width="1%">Status</th>
+                                        <th width="1%">Ads Type</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($ads as $key=> $ad)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
+                                            <td>{{ $ad['ad_sr_no'] }}</td>
                                             <td>{{ $ad['ad_name'] }}</td>
                                             <td>
-                                                <img src="{{ asset('uploads//') }}/{{ !empty($ad['ad_media'])?$ad['ad_media']:'no-image.png' }}" alt="" height="70" width="70">
+                                                @if ($ad['ad_type'] == 'Private')
+                                                    <img src="{{ asset('uploads//') }}/{{ !empty($ad['ad_media'])?$ad['ad_media']:'no-image.png' }}" alt="" height="70" width="70">
+                                                @else
+                                                    {{" No Image "}}
+                                                @endif
+                                               
                                             </td>
-                                            <td>{{ $ad['ad_link'] }}</td>
+                                            <td>
+                                                @if ($ad['ad_type'] == 'Private')
+                                                    {{ $ad['ad_link'] }}
+                                                @else
+                                                    {{" - "}}
+                                                @endif
+                                               
+                                            
+                                            </td>
                                             <td>{{ $ad['ad_from_dt'] ?? ''}}</td>
                                             <td>{{ $ad['ad_to_dt'] ?? ''}}</td>
+                                            <td>{{ $ad['ad_status'] ?? ''}}</td>
                                             <td>{{ $ad['ad_type'] }}</td>
                                         </tr>
                                     @endforeach
@@ -97,7 +114,7 @@
                             ==================================*/
         if ($('#dataTable').length) {
             $('#dataTable').DataTable({
-                responsive: true
+                responsive: false
             });
         }
     </script>

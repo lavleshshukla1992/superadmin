@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\AdsHistory;
+use Illuminate\Support\Facades\URL;
 
 class AdsService
 {
@@ -23,11 +24,12 @@ class AdsService
 
             if ($ad->ad_type == 2) 
             {
+
                 $result[] = [
                 "ad_sr_no" => $ad->ad_sr_no,
                 "ad_type" => $ad->ad_type,
                 "ad_name" => $ad->ad_name,
-                "ad_media" => $ad->ad_media,
+                "ad_media" => ($ad->ad_media ) ? URL::to('/').'/uploads/'.$ad->ad_media : $ad->ad_media,
                 "ad_link" => $ad->ad_link,
                 ];
             }

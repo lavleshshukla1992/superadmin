@@ -25,14 +25,14 @@ class AdController extends Controller
                 'id' => $val->id ?? '',
                 'ad_sr_no' => $val->ad_sr_no ?? '',
                 'ad_type' => $val->ad_type == 1 ? 'Google' : 'Private',
-                'ad_status' => $val->ad_status == 1 ? 'Active' : 'Inactive',
+                'ad_status' => is_null($val->deleted_at)? 'Active' : 'Completed',
                 'google_script' => $val->google_script ?? '',
-                'ad_name' => $val->ad_name ?? '',
+                'ad_name' => ( $val->ad_type == 1 ) ? 'Google Ad': $val->ad_name ?? '',
                 'ad_media' => $val->ad_media ?? '',
                 'google_script' => $val->google_script ?? '',
                 'ad_link' => $val->ad_link ?? '',
                 'ad_from_dt' => date('d-M-Y h:i:sa', strtotime($val->created_at)),
-                // 'ad_to_dt' => $val->ad_to_dt ?? '',
+                'ad_to_dt' => $val->deleted_at ?? '',
             );
             //  echo"<pre>";print_r($ads);die;
         }
@@ -78,12 +78,14 @@ class AdController extends Controller
                 $fileName = $file->getClientOriginalName();
                 $file->move('uploads', $fileName);
             }
+
+            $name = $val['ad_type'] == 1 ? 'Google Ads' : $val['ad_name'] ;
             $data = array(
                 'uid' => $userId,
                 'ad_sr_no' => $key,
                 'ad_type' => $val['ad_type'] ?? '',
                 'google_script' => $val['google_script'] ?? '',
-                'ad_name' => $val['ad_name'] ?? '',
+                'ad_name' => $name ?? '',
                 'ad_media' => $fileName ?? '',
                 'ad_link' => $val['ad_link'] ?? '',
                 'ad_status' => $val['ad_status'] ?? '1',

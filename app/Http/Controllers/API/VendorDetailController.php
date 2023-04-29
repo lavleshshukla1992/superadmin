@@ -19,7 +19,8 @@ class VendorDetailController extends Controller
      */
     public function index()
     {
-        return new VendorDetailCollection(VendorDetail::all());
+        
+        return response()->json(['success' => true,'status_code' =>200 , 'message' => 'Vendor list loaded Successfully','data'=>new VendorDetailCollection(VendorDetail::all())]) ;
     }
 
     /**
@@ -32,7 +33,7 @@ class VendorDetailController extends Controller
     {
         $input = VendorServices::getVendorInput($request);
         $vendor = VendorDetail::create($input);
-        return response()->json(['success' => true,'vendor_id' => $vendor->id, 'message' => 'Successfully Signed Up']);
+        return response()->json(['success' => true,'status_code' =>200 ,'vendor_id' => $vendor->id, 'message' => 'Successfully Signed Up']);
     }
 
     /**
@@ -43,7 +44,7 @@ class VendorDetailController extends Controller
      */
     public function show(VendorDetail $vendorDetail)
     {
-        return response()->json(['success' => true,'data'=>new VendorDetailResource($vendorDetail)]) ;
+        return response()->json(['success' => true,'status_code' =>200 , 'message' => 'Vendor detail loaded Successfully','data'=>new VendorDetailResource($vendorDetail)]) ;
     }
 
     /**
@@ -61,9 +62,9 @@ class VendorDetailController extends Controller
             $vendorDetail->fill($input);
             $vendorDetail->save();
 
-            return response()->json(['success' => true,'vendor_id' => $vendorDetail->id, 'message' => 'Profile updated successfully']);
+            return response()->json(['success' => true,'status_code' =>200,'vendor_id' => $vendorDetail->id, 'message' => 'Profile updated successfully']);
         }
-        return response()->json(['success' => true,'message' => 'Mobile number not Verified']);
+        return response()->json(['success' => true,'status_code' => 200,'message' => 'Mobile number not Verified']);
     }
 
     /**

@@ -70,14 +70,14 @@
                                                     <label for="ad_type{{ $i }}">Ads Type</label>
                                                     <div>
                                                         <label>
-                                                            <input type="radio" class="ad_type"
+                                                            <input type="radio" class="ad_type ad_type_n{{ $i }}"
                                                                 onclick="return showHideFields('google','{{ $i }}')"
                                                                 name="ads[{{ $i }}][ad_type]"
                                                                 id="ad_type[{{ $i }}]" value="1"
                                                                 {{ (isset($ads[$i]['ad_type']) && $ads[$i]['ad_type'] == '1') || empty($ads[$i]['ad_type']) ? 'checked' : '' }}>
                                                             Google
                                                             Ads
-                                                            <input type="radio" class="ad_type"
+                                                            <input type="radio" class="ad_type ad_type_private{{ $i }}"
                                                                 onclick="return showHideFields('private','{{ $i }}')"
                                                                 name="ads[{{ $i }}][ad_type]"
                                                                 id="ad_type[{{ $i }}]" value="2"
@@ -107,6 +107,7 @@
                                                         id="ad_media{{ $i }}"
                                                         value="{{ $ads[$i]['ad_media'] ?? '' }}"
                                                         name="ads[{{ $i }}][ad_media]">
+                                                        {{-- <img id="preview-image-before-upload{{ $i }}" cla src=""alt="preview image" style="max-height: 250px;"> --}}
                                                         @if (!empty($ads[$i]['ad_media']))
                                                         <img src="{{ asset('uploads//') }}/{{ $ads[$i]['ad_media'] ?? '' }}" alt="" height="200" width="200">
                                                         @endif
@@ -123,13 +124,13 @@
                                                 <button type="sbmit" id="savebtn{{ $i }}"
                                                     class="btn btn-primary mt-4 pr-4 pl-4 {{ !empty($ads[$i]['ad_type']) ? 'hide' : ''}} savebtn">SAVE</button>
 
-                                                <a href="{{route('admin.ad.create')}}" type="button" class="btn btn-danger mt-4 pr-4 pl-4 "> Cancel</a>
+                                                <a href="{{route('admin.ad.create')}}" type="button" class="btn btn-danger mt-4 pr-4 pl-4 hide" id="cancel_button{{$i}}"> CANCEL</a>
 
-                                                <a class="btn btn-danger text-white deletebtn hide"
+                                                {{-- <a class="btn btn-danger text-white deletebtn hide"
                                                     href="{{ route('admin.ad.destroy', $ads[$i]['id'] ?? '') }}"
                                                     onclick="event.preventDefault(); document.getElementById('delete-form-{{ $i }}').submit();">
                                                     DELETE
-                                                </a>
+                                                </a> --}}
                                             </form>
 
                                             <form id="delete-form-{{ $i }}"
@@ -163,6 +164,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js">
     </script>
     <script type="text/javascript">
+        var totalAds = "{{$total_ads}}";
         $(document).ready(function() {
             $(".date").datetimepicker({
                 format: 'DD-MMM-YYYY'
@@ -172,20 +174,40 @@
             $(".ad_type").click(function() {
                 $("#content").toggle();
             });
-            @for ($i = 1; $i < $total_ads; $i++)
-                @if (!empty($ads[$i]['ad_type']))
-                $("#ad{{ $i }} input").prop("disabled", true);
-                $("#ad{{ $i }} textatra").prop("disabled", true);
-            @else
-                $("#ad{{ $i }} input").prop("disabled", false);
-                $("#ad{{ $i }} textatra").prop("disabled", false);
-            @endif
-        @endfor
+
+            for (let index = 0; index < totalAds; index++) {
+                var isChecked = $('.ad_type_n'+index).prop("checked");
+                isChecked = (isChecked != true) ? $('.ad_type_private'+index).prop("checked") : isChecked ;
+                if (isChecked) 
+                {
+                    $("#ad"+index+" input").prop("disabled", true);
+                    $("#google_script"+index).prop("readonly", true);
+                } 
+                else 
+                {
+                    $("#ad{{ $i }} input").prop("disabled", false);
+                    $("#ad{{ $i }} textatra").prop("readonly", false);
+                }
+                
+            }
+        });
+        $('#ad_media1').change(function(){
+            
+            let reader = new FileReader();
+            console.log("Image upload called...");
+            reader.onload = (e) => { 
+            
+                $('#preview-image-before-upload2').attr('src', e.target.result); 
+            }
+            
+            reader.readAsDataURL(this.files[0]); 
+            
         });
     </script>
 @endsection
 <script>
     function showHideFields(ad_type, tab_id) {
+        console.log({ad_type},{tab_id});
         if (ad_type == 'google') {
             $('#ad' + tab_id + ' .ad_type_private').addClass('hide');
             $('#ad' + tab_id + ' .ad_type_google').removeClass('hide');
@@ -196,10 +218,12 @@
         }
         if (ad_type == 'editbtn') {
             $("#ad" + tab_id + " input").prop("disabled", false);
-            $("#ad" + tab_id + " textatra").prop("disabled", false);
+            $("#google_script"+tab_id).removeAttr("readonly");
             $('#ad' + tab_id + ' .savebtn').removeClass('hide');
             $('#ad' + tab_id + ' .deletebtn').removeClass('hide');
             $('#ad' + tab_id + ' .editbtn').addClass('hide');
+            $('#cancel_button' + tab_id).removeClass('hide');
+
         }
     }
 </script>
