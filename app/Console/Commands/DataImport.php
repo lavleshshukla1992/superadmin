@@ -31,13 +31,14 @@ class DataImport extends Command
     public function handle()
     {
         // return Command::SUCCESS;
-        $filename = public_path('Pincode_30052019.csv');
+        $filename = public_path('State_District_Pincode.csv');
         $delimiter = ',';
 
         if (!file_exists($filename) || !is_readable($filename))
         {
             return false;
         }
+
 
         $header = null;
         $data = array();
@@ -57,21 +58,26 @@ class DataImport extends Command
         foreach ($data as $key => $row) 
         {
 
-            $state = State::firstOrCreate([
-                'name' => $row['StateName'],
-                'country_id' => '1'
-            ],[
-                'status' => 'Active'
-            ]);
-            $district = District::firstOrCreate([
-                'name' => $row['District'],
-                'state_id' => $state->id
-            ],['status' => 'Active']);
+            try {
+                $state = State::firstOrCreate([
+                    'name' => $row['StateName'],
+                    'country_id' => '1'
+                ],[
+                    'status' => 'Active'
+                ]);
+                $district = District::firstOrCreate([
+                    'name' => $row['District'],
+                    'state_id' => $state->id
+                ],['status' => 'Active']);
+    
+                $state = Pincode::firstOrCreate([
+                    'pincode' => $row['Pincode'],
+                    'district_id' => $district->id,
+                ],['status' => 'Active']);
 
-            $state = Pincode::firstOrCreate([
-                'pincode' => $row['Pincode'],
-                'district_id' => $district->id,
-            ],['status' => 'Active']);
+            } catch (\Throwable $th) {
+               dump($row);
+            }
         }
 
     }

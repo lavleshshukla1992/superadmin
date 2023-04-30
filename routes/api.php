@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\API\OTPController;
 use App\Http\Controllers\VendorApiController;
+use App\Http\Controllers\API\LoginAPIController;
 use App\Http\Controllers\API\StateApiController;
 use App\Http\Controllers\API\PincodeAPIController;
 use App\Http\Controllers\API\DistrictApiController;
@@ -47,6 +48,9 @@ Route::post('resend-otp',[OTPController::class,'reSendOTP']);
 Route::post('verify-otp',[OTPController::class,'verifyOTP']);
 
 Route::post('pincode-list',[PincodeAPIController::class,'getPinCodeList']);
+
+Route::post('login',[LoginAPIController::class,'login']);
+Route::post('password-update',[LoginAPIController::class,'passwordUpdate']);
 
 
 Route::apiResource('countries',CountryApiController::class)->only([

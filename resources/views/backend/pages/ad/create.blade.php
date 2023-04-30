@@ -107,7 +107,7 @@
                                                         id="ad_media{{ $i }}"
                                                         value="{{ $ads[$i]['ad_media'] ?? '' }}"
                                                         name="ads[{{ $i }}][ad_media]">
-                                                        {{-- <img id="preview-image-before-upload{{ $i }}" cla src=""alt="preview image" style="max-height: 250px;"> --}}
+                                                        <img id="preview-image-before-upload{{ $i }}" cla src=""alt="preview image" style="max-height: 250px;" class="hide">
                                                         @if (!empty($ads[$i]['ad_media']))
                                                         <img src="{{ asset('uploads//') }}/{{ $ads[$i]['ad_media'] ?? '' }}" alt="" height="200" width="200">
                                                         @endif
@@ -191,17 +191,41 @@
                 
             }
         });
-        $('#ad_media1').change(function(){
-            
+        $(document).on('change','#ad_media2',function(){
             let reader = new FileReader();
-            console.log("Image upload called...");
             reader.onload = (e) => { 
-            
+                $('#preview-image-before-upload2').removeClass('hide');
                 $('#preview-image-before-upload2').attr('src', e.target.result); 
             }
             
             reader.readAsDataURL(this.files[0]); 
+        });
+        $(document).on('change','#ad_media1',function(){
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-before-upload1').removeClass('hide');
+                $('#preview-image-before-upload1').attr('src', e.target.result); 
+            }
             
+            reader.readAsDataURL(this.files[0]); 
+        });
+        $(document).on('change','#ad_media4',function(){
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-before-upload4').removeClass('hide');
+                $('#preview-image-before-upload4').attr('src', e.target.result); 
+            }
+            
+            reader.readAsDataURL(this.files[0]); 
+        });
+        $(document).on('change','#ad_media3',function(){
+            let reader = new FileReader();
+            reader.onload = (e) => { 
+                $('#preview-image-before-upload3').removeClass('hide');
+                $('#preview-image-before-upload3').attr('src', e.target.result); 
+            }
+            
+            reader.readAsDataURL(this.files[0]); 
         });
     </script>
 @endsection

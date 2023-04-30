@@ -119,47 +119,62 @@
                             </ul>
                         </li>
                     @endif
-                    @if ($usr->can('category.create') || $usr->can('category.view') ||  $usr->can('category.edit') ||  $usr->can('category.delete'))
+                    @if ($usr->can('pincode.create') || $usr->can('pincode.view') ||  $usr->can('pincode.edit') ||  $usr->can('pincode.delete'))
+                        <li>
+                            <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
+                                Pincode
+                            </span></a>
+                            <ul class="collapse {{ Route::is('pin-codes.create') || Route::is('pin-codes.index') || Route::is('pin-codes.edit') || Route::is('pin-codes.show') ? 'in' : '' }}">
+                                @if ($usr->can('pincode.create'))
+                                    <li class="{{ Route::is('pin-codes.create')  ? 'active' : '' }}"><a href="{{ route('pin-codes.create') }}">Add Pincode</a></li>
+                                @endif
+                                @if ($usr->can('pincode.view'))
+                                    <li class="{{ Route::is('pin-codes.index')  || Route::is('pin-codes.edit') ? 'active' : '' }}"><a href="{{ route('pin-codes.index') }}"> Pincode List</a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+                    @if ($usr->can('market_place.create') || $usr->can('market_place.view') ||  $usr->can('market_place.edit') ||  $usr->can('market_place.delete'))
                         <li>
                             <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
                                 Marketplace
                             </span></a>
-                            <ul class="collapse {{ Route::is('categories.create') || Route::is('categories.index') || Route::is('categories.edit') || Route::is('categories.show') ? 'in' : '' }}">
-                                @if ($usr->can('category.create'))
-                                    <li class="{{ Route::is('categories.create')  ? 'active' : '' }}"><a href="{{ route('categories.create') }}">Add Marketplace</a></li>
+                            <ul class="collapse {{ Route::is('market-places.create') || Route::is('market-places.index') || Route::is('market-places.edit') || Route::is('market-places.show') ? 'in' : '' }}">
+                                @if ($usr->can('market_place.create'))
+                                    <li class="{{ Route::is('market-places.create')  ? 'active' : '' }}"><a href="{{ route('market-places.create') }}">Add Marketplace</a></li>
                                 @endif
-                                @if ($usr->can('category.view'))
-                                    <li class="{{ Route::is('categories.index')  || Route::is('categories.edit') ? 'active' : '' }}"><a href="{{ route('categories.index') }}"> Marketplace</a></li>
+                                @if ($usr->can('market_place.view'))
+                                    <li class="{{ Route::is('market-places.index')  || Route::is('market-places.edit') ? 'active' : '' }}"><a href="{{ route('market-places.index') }}"> Marketplace</a></li>
                                 @endif
                             </ul>
                         </li>
                     @endif
-                    @if ($usr->can('sub_category.create') || $usr->can('sub_category.view') ||  $usr->can('sub_category.edit') ||  $usr->can('sub_category.delete'))
+                    @if ($usr->can('vending.create') || $usr->can('vending.view') ||  $usr->can('vending.edit') ||  $usr->can('vending.delete'))
                         <li>
                             <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
                                 Vending
                             </span></a>
-                            <ul class="collapse {{ Route::is('sub-categories.create') || Route::is('sub-categories.index') || Route::is('sub-categories.edit') || Route::is('sub-categories.show') ? 'in' : '' }}">
-                                @if ($usr->can('sub_category.create'))
-                                    <li class="{{ Route::is('sub-categories.create')  ? 'active' : '' }}"><a href="{{ route('sub-categories.create') }}">Vending</a></li>
+                            <ul class="collapse {{ Route::is('vending.create') || Route::is('vending.index') || Route::is('vending.edit') || Route::is('vending.show') ? 'in' : '' }}">
+                                @if ($usr->can('vending.create'))
+                                    <li class="{{ Route::is('vending.create')  ? 'active' : '' }}"><a href="{{ route('vending.create') }}">Vending</a></li>
                                 @endif
-                                @if ($usr->can('sub_category.view'))
-                                    <li class="{{ Route::is('sub-categories.index')  || Route::is('sub-categories.edit') ? 'active' : '' }}"><a href="{{ route('sub-categories.index') }}"> Vending List</a></li>
+                                @if ($usr->can('vending.view'))
+                                    <li class="{{ Route::is('vending.index')  || Route::is('vending.edit') ? 'active' : '' }}"><a href="{{ route('vending.index') }}"> Vending List</a></li>
                                 @endif
                             </ul>
                         </li>
                     @endif
-                    @if ($usr->can('sub_category.create') || $usr->can('sub_category.view') ||  $usr->can('sub_category.edit') ||  $usr->can('sub_category.delete'))
+                    @if ($usr->can('membership.create') || $usr->can('membership.view') ||  $usr->can('membership.edit') ||  $usr->can('membership.delete'))
                         <li>
                             <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
                                 Membership Details
                             </span></a>
-                            <ul class="collapse {{ Route::is('sub-categories.create') || Route::is('sub-categories.index') || Route::is('sub-categories.edit') || Route::is('sub-categories.show') ? 'in' : '' }}">
-                                @if ($usr->can('sub_category.create'))
-                                    <li class="{{ Route::is('sub-categories.create')  ? 'active' : '' }}"><a href="{{ route('sub-categories.create') }}">View / Apply</a></li>
+                            <ul class="collapse {{ Route::is('memberships.create') || Route::is('memberships.index') || Route::is('memberships.edit') || Route::is('memberships.show') ? 'in' : '' }}">
+                                @if ($usr->can('membership.create'))
+                                    <li class="{{ Route::is('memberships.create')  ? 'active' : '' }}"><a href="{{ route('memberships.create') }}">View / Apply</a></li>
                                 @endif
-                                @if ($usr->can('sub_category.view'))
-                                    <li class="{{ Route::is('sub-categories.index')  || Route::is('sub-categories.edit') ? 'active' : '' }}"><a href="{{ route('sub-categories.index') }}">Subscription</a></li>
+                                @if ($usr->can('membership.view'))
+                                    <li class="{{ Route::is('memberships.index')  || Route::is('memberships.edit') ? 'active' : '' }}"><a href="{{ route('memberships.index') }}">Subscription</a></li>
                                 @endif
                             </ul>
                         </li>

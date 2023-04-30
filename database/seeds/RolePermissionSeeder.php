@@ -140,6 +140,39 @@ class RolePermissionSeeder extends Seeder
                     'sub_category.approve',
                 ]
             ],
+            [
+                'group_name' => 'pincode',
+                'permissions' => [
+                    // role Permissions
+                    'pincode.create',
+                    'pincode.view',
+                    'pincode.edit',
+                    'pincode.delete',
+                    'pincode.approve',
+                ]
+            ],
+            [
+                'group_name' => 'market_place',
+                'permissions' => [
+                    // role Permissions
+                    'market_place.create',
+                    'market_place.view',
+                    'market_place.edit',
+                    'market_place.delete',
+                    'market_place.approve',
+                ]
+            ],
+            [
+                'group_name' => 'vending',
+                'permissions' => [
+                    // role Permissions
+                    'vending.create',
+                    'vending.view',
+                    'vending.edit',
+                    'vending.delete',
+                    'vending.approve',
+                ]
+            ],
         ];
 
 

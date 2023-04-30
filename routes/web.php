@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StateController;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use App\Models\Admin;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -53,4 +57,80 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('district', 'DistrictController');
     Route::resource('categories', 'CategoryController');
     Route::resource('sub-categories', 'SubCategoryController');
+    Route::resource('pin-codes', 'PincodeController')->parameter('pin-codes','pinCode');
+    Route::resource('market-places', 'MarketPlaceController')->parameter('market-places','marketPlace');
+    Route::resource('vending', 'VendingController');
+    Route::resource('memberships', 'MemebershipController');
+});
+
+Route::get('/test',function(){
+    $permissions = [
+        // [
+        //     'group_name' => 'pincode',
+        //     'permissions' => [
+        //         // role Permissions
+        //         'pincode.create',
+        //         'pincode.view',
+        //         'pincode.edit',
+        //         'pincode.delete',
+        //         'pincode.approve',
+        //     ]
+        // ],
+        // [
+        //     'group_name' => 'market_place',
+        //     'permissions' => [
+        //         // role Permissions
+        //         'market_place.create',
+        //         'market_place.view',
+        //         'market_place.edit',
+        //         'market_place.delete',
+        //         'market_place.approve',
+        //     ]
+        // ],
+        // [
+        //     'group_name' => 'vending',
+        //     'permissions' => [
+        //         // role Permissions
+        //         'vending.create',
+        //         'vending.view',
+        //         'vending.edit',
+        //         'vending.delete',
+        //         'vending.approve',
+        //     ]
+        // ],
+        [
+            'group_name' => 'membership',
+            'permissions' => [
+                // role Permissions
+                'membership.create',
+                'membership.view',
+                'membership.edit',
+                'membership.delete',
+                'membership.approve',
+            ]
+        ],
+    ];
+
+    $roleSuperAdmin = Role::firstOrCreate(['name' => 'superadmin', 'guard_name' => 'admin']);
+
+        // Create and Assign Permissions
+        for ($i = 0; $i < count($permissions); $i++) {
+            $permissionGroup = $permissions[$i]['group_name'];
+            for ($j = 0; $j < count($permissions[$i]['permissions']); $j++) {
+                // Create Permission
+                $permissionCount = Permission::where(['name' => $permissions[$i]['permissions'][$j], 'group_name' => $permissionGroup, 'guard_name' => 'admin'])->count('id');
+                if ($permissionCount == 0) 
+                {
+                    $permission = Permission::create(['name' => $permissions[$i]['permissions'][$j], 'group_name' => $permissionGroup, 'guard_name' => 'admin']);
+                    $roleSuperAdmin->givePermissionTo($permission);
+                    $permission->assignRole($roleSuperAdmin);
+                }
+            }
+        }
+
+        // Assign super admin role permission to superadmin user
+        $admin = Admin::where('username', 'superadmin')->first();
+        if ($admin) {
+            $admin->assignRole($roleSuperAdmin);
+        }
 });

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
+use DB;
+use App\Services\AdsService;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Ad;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Ad;
-use DB;
 
 class AdController extends Controller
 {
@@ -94,12 +95,15 @@ class AdController extends Controller
             $ad = DB::table('ads')->where('ad_sr_no', $key)->first('id');
             if (empty($ad->id)) {
                 $id = DB::table('ads')->insertGetId($data);
-                (new Ad)->insertIntoHistory($id, 'insert');
+                AdsService::prepareAdHistoryData($ad->id);
+                // (new Ad)->insertIntoHistory($id, 'insert');
             } else {
                 DB::table('ads')
                     ->where('id',  $ad->id)
-                    ->update($data);
-                (new Ad)->insertIntoHistory($ad->id, 'update');
+                    ->update($data);   
+                    AdsService::prepareAdHistoryData($ad->id);
+ 
+                // (new Ad)->insertIntoHistory($ad->id, 'update');
             }
         }
 
