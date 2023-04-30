@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Models\VendorDetail;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use App\Http\Resources\VendorDetailResource;
 
 class LoginAPIController extends Controller
 {
@@ -18,12 +19,12 @@ class LoginAPIController extends Controller
         {
             if ($vendorDetail->password == $password) 
             {
-                return  response()->json(['status_code' => 200,'success' => true,"message" => "Logged In  successfully"]);
+                return  response()->json(['status_code' => 200,'success' => true,"message" => "Logged In  successfully",'data'=> new VendorDetailResource($vendorDetail)]);
             }
             return  response()->json(['status_code' => 200,'success' => true,"message" => "Please provide valid password"]);
         }
 
-        return  response()->json(['status_code' => 200,'success' => true,"message" => "Please provide valid mobile number "]);
+        return  response()->json(['status_code' => 200,'success' => true,"message" => "User does not exists"]);
     }
     public function passwordUpdate(Request $request)
     {
@@ -39,6 +40,6 @@ class LoginAPIController extends Controller
 
         }
 
-        return  response()->json(['status_code' => 200,'success' => true,"message" => "Please provide valid mobile number "]);
+        return  response()->json(['status_code' => 200,'success' => true,"message" => "User does not exists"]);
     }
 }

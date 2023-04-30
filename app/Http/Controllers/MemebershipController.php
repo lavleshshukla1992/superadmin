@@ -26,7 +26,7 @@ class MemebershipController extends Controller
      */
     public function create()
     {
-        //
+        return view('backend.pages.memberships.create');
     }
 
     /**

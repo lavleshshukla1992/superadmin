@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-    Vending Create - Admin Panel
+    Membership Create - Admin Panel
 @endsection
 
 @section('styles')
@@ -26,11 +26,11 @@
         <div class="row align-items-center">
             <div class="col-sm-6">
                 <div class="breadcrumbs-area clearfix">
-                    <h4 class="page-title pull-left">Vending Create</h4>
+                    <h4 class="page-title pull-left">Membership Create</h4>
                     <ul class="breadcrumbs pull-left">
                         <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li><a href="{{ route('vending.index') }}">All Vendings</a></li>
-                        <li><span>Create Vending</span></li>
+                        <li><a href="{{ route('memberships.create') }}">All Membership</a></li>
+                        <li><span>Create Membership</span></li>
                     </ul>
                 </div>
             </div>
@@ -50,7 +50,7 @@
                         {!! Form::open(['route'=>'vending.store','method'=>'post']) !!}
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4 class="header-title">Manage Vendings</h4>
+                                    <h4 class="header-title">Manage Membership</h4>
 
                                 </div>
                                 <div class="col-md-6">
@@ -75,6 +75,22 @@
                                    
                                 </div>
                                 <div class="row">
+                                    <div class="col-md-6">
+                                        {!! Form::label('validity_from', 'Validity From') !!}
+                                        {!! Form::date('validity_from', null , ['class'=>'form-control']) !!}
+                                    </div>
+                                    
+                                    <div class="col-md-6">
+                                        {!! Form::label('validity_to', 'Validity To') !!}
+                                        {!! Form::date('validity_to', null , ['class'=>'form-control']) !!}
+                                    </div>
+                                   
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        {!! Form::label('subscription', 'Dubscription') !!}
+                                        {!! Form::select('subscription',[],null , ['class'=>'form-control','rows'=>5]) !!}
+                                    </div>
                                     <div class="col-md-6">
                                         {!! Form::label('description', 'Description') !!}
                                         {!! Form::textarea('description', null , ['class'=>'form-control','rows'=>5]) !!}

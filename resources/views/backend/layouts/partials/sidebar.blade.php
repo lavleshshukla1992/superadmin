@@ -174,7 +174,7 @@
                                     <li class="{{ Route::is('memberships.create')  ? 'active' : '' }}"><a href="{{ route('memberships.create') }}">View / Apply</a></li>
                                 @endif
                                 @if ($usr->can('membership.view'))
-                                    <li class="{{ Route::is('memberships.index')  || Route::is('memberships.edit') ? 'active' : '' }}"><a href="{{ route('memberships.index') }}">Subscription</a></li>
+                                    <li class="{{ Route::is('memberships.create')  || Route::is('memberships.edit') ? 'active' : '' }}"><a href="{{ route('memberships.create') }}">Subscription</a></li>
                                 @endif
                             </ul>
                         </li>

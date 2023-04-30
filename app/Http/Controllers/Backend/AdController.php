@@ -17,7 +17,7 @@ class AdController extends Controller
     {
         //$ads = Ad::all();
         $results = DB::table('ads_history')
-            ->where('deleted', 0)
+            ->where('deleted', 0)->orderBy('created_at', 'DESC')
             ->get();
         $total_ads = 5;
         $ads = array();
