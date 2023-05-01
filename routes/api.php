@@ -11,6 +11,7 @@ use App\Http\Controllers\API\StateApiController;
 use App\Http\Controllers\API\PincodeAPIController;
 use App\Http\Controllers\API\DistrictApiController;
 use App\Http\Controllers\API\VendorDetailController;
+use App\Http\Controllers\MemebershipController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,6 +52,10 @@ Route::post('pincode-list',[PincodeAPIController::class,'getPinCodeList']);
 
 Route::post('login',[LoginAPIController::class,'login']);
 Route::post('password-update',[LoginAPIController::class,'passwordUpdate']);
+
+Route::get('membership-detail/{memebership}',[MemebershipController::class,'show']);
+
+Route::post('membership-store',[MemebershipController::class,'store']);
 
 
 Route::apiResource('countries',CountryApiController::class)->only([

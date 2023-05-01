@@ -179,6 +179,21 @@
                             </ul>
                         </li>
                     @endif
+                    @if ($usr->can('feedback.create') || $usr->can('feedback.view') ||  $usr->can('feedback.edit') ||  $usr->can('feedback.delete'))
+                        <li>
+                            <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
+                                Feedback / Enquery Details
+                            </span></a>
+                            <ul class="collapse {{ Route::is('feedback.create') || Route::is('feedback.index') || Route::is('feedback.edit') || Route::is('feedback.show') ? 'in' : '' }}">
+                                @if ($usr->can('feedback.create'))
+                                    <li class="{{ Route::is('feedback.index')  ? 'active' : '' }}"><a href="{{ route('feedback.index') }}">Feedback / Enquery</a></li>
+                                @endif
+                                {{-- @if ($usr->can('feedback.view'))
+                                    <li class="{{ Route::is('feedback.create')  || Route::is('feedback.edit') ? 'active' : '' }}"><a href="{{ route('feedback.create') }}">Subscription</a></li>
+                                @endif --}}
+                            </ul>
+                        </li>
+                    @endif
 
                 </ul>
             </nav>

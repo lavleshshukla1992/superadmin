@@ -24,7 +24,7 @@ class LoginAPIController extends Controller
             return  response()->json(['status_code' => 200,'success' => true,"message" => "Please provide valid password"]);
         }
 
-        return  response()->json(['status_code' => 200,'success' => true,"message" => "User does not exists"]);
+        return  response()->json(['status_code' => 200,'success' => true,"message" => "User does not exist"]);
     }
     public function passwordUpdate(Request $request)
     {
@@ -40,6 +40,6 @@ class LoginAPIController extends Controller
 
         }
 
-        return  response()->json(['status_code' => 200,'success' => true,"message" => "User does not exists"]);
+        return  response()->json(['status_code' => 200,'success' => true,"message" => "User does not exist"]);
     }
 }

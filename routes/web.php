@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PincodeController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StateController;
@@ -37,8 +38,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('users', 'Backend\UsersController', ['names' => 'admin.users']);
     Route::resource('admins', 'Backend\AdminsController', ['names' => 'admin.admins']);
 
-    Route::get('import-csv',[StateController::class,'importData']);
-
+    Route::post('districts-list',[PincodeController::class,'getDistrictList']);
     // Login Routes
     Route::get('/login', 'Backend\Auth\LoginController@showLoginForm')->name('admin.login');
     Route::post('/login/submit', 'Backend\Auth\LoginController@login')->name('admin.login.submit');
@@ -51,6 +51,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/password/reset/submit', 'Backend\Auth\ForgetPasswordController@reset')->name('admin.password.update');
 
     // Ads
+    Route::resource('feedback', 'FeedbackController');
     Route::resource('ad', 'Backend\AdController', ['names' => 'admin.ad']);
     Route::resource('country', 'CountryController');
     Route::resource('state', 'StateController');
@@ -98,15 +99,26 @@ Route::get('/test',function(){
         //         'vending.approve',
         //     ]
         // ],
+        // [
+        //     'group_name' => 'membership',
+        //     'permissions' => [
+        //         // role Permissions
+        //         'membership.create',
+        //         'membership.view',
+        //         'membership.edit',
+        //         'membership.delete',
+        //         'membership.approve',
+        //     ]
+        // ],
         [
-            'group_name' => 'membership',
+            'group_name' => 'feedback',
             'permissions' => [
                 // role Permissions
-                'membership.create',
-                'membership.view',
-                'membership.edit',
-                'membership.delete',
-                'membership.approve',
+                'feedback.create',
+                'feedback.view',
+                'feedback.edit',
+                'feedback.delete',
+                'feedback.approve',
             ]
         ],
     ];

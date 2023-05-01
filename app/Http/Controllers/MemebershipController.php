@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Pincode;
 use App\Models\Memebership;
 use Illuminate\Http\Request;
+use App\Http\Resources\MembershipResource;
 
 class MemebershipController extends Controller
 {
@@ -16,7 +19,7 @@ class MemebershipController extends Controller
     {
         $marketPlaces = Memebership::select(['id','name','description','status'])->toBase()->get();
         $marketPlaces = !is_null($marketPlaces) ? json_decode(json_encode($marketPlaces),true) : [];
-        return view('backend.pages.marketplace.index',compact('marketPlaces'));
+        return view('backend.pages.memberships.index',compact('marketPlaces'));
     }
 
     /**
@@ -37,7 +40,12 @@ class MemebershipController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        $year = Carbon::now()->format('Y');
+        $input['membership_id'] = "MEMB".$year.$input['user_id'] ?? '';
+
+        $memebership = Memebership::create($input);
+        return response()->json(['success' => true,'status_code' =>200 , 'message' => 'Membership Created Successfully','membership_id'=>$memebership->id]) ;
     }
 
     /**
@@ -48,7 +56,7 @@ class MemebershipController extends Controller
      */
     public function show(Memebership $memebership)
     {
-        //
+        return response()->json(['success' => true,'status_code' =>200 , 'message' => 'Vendor detail loaded Successfully','data'=> new MembershipResource($memebership)]);
     }
 
     /**

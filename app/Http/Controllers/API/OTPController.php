@@ -21,7 +21,7 @@ class OTPController extends Controller
         
         if ($isValidMobileNumber &&  $slug == 'signup') 
         {
-            return response()->json(['success' => true,'status_code' =>200 ,'message' => 'User Already Exists']);
+            return response()->json(['success' => true,'status_code' =>200 ,'message' => 'User already exist']);
         }
 
         if ($isValidMobileNumber) {
@@ -38,12 +38,12 @@ class OTPController extends Controller
             }
             else
             {
-                return response()->json(['success' => true,'message' => 'User does not exists']);
+                return response()->json(['success' => true,'message' => 'User does not exist']);
             }
 
             return response()->json(['success' => true,'message' => 'OTP Sent successfully']);
         }
-        return response()->json(['success' => true,'message' => 'User does not exists']);
+        return response()->json(['success' => true,'message' => 'User does not exist']);
 
     }
 
@@ -56,7 +56,7 @@ class OTPController extends Controller
 
         if ($isValidMobileNumber &&  $slug == 'signup') 
         {
-            return response()->json(['success' => true,'status_code' =>200 ,'message' => 'User Already Exists']);
+            return response()->json(['success' => true,'status_code' =>200 ,'message' => 'User Already Exist']);
         }
 
         if ($isValidMobileNumber) {
@@ -76,11 +76,11 @@ class OTPController extends Controller
             }
             else
             {
-                return response()->json(['success' => true,'status_code' =>200 ,'message' => 'User Does Not Exists']);
+                return response()->json(['success' => true,'status_code' =>200 ,'message' => 'User Does Not Exist']);
             }
 
         }
-        return response()->json(['success' => true,'status_code' =>200 ,'message' => 'User Does Not Exists']);
+        return response()->json(['success' => true,'status_code' =>200 ,'message' => 'User Does Not Exist']);
 
     }
 

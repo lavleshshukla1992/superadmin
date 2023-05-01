@@ -72,6 +72,7 @@ class DataImport extends Command
     
                 $state = Pincode::firstOrCreate([
                     'pincode' => $row['Pincode'],
+                    'state_id' => $state->id,
                     'district_id' => $district->id,
                 ],['status' => 'Active']);
 

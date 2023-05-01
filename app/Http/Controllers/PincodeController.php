@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\District;
+use App\Models\State;
 use App\Models\Pincode;
 use Illuminate\Http\Request;
 
@@ -89,5 +91,18 @@ class PincodeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getDistrictList(Request $request)
+    {
+        $stateId = $request->get('state');
+        $result = [];
+
+        if (! is_null($stateId)) 
+        {
+           $result = District::where('state_id',$stateId)->pluck('name','id')->toArray();
+        }
+
+        return $result;
     }
 }

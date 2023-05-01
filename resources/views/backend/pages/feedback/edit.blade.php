@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-    Pincode Create - Admin Panel
+    District Create - Admin Panel
 @endsection
 
 @section('styles')
@@ -19,11 +19,6 @@
     </style>
 @endsection
 
-@php
-    $state = App\Models\state::pluck('name','id')->toArray();
-    $state = ['' => 'Select State']+$state;
-@endphp
-
 
 @section('admin-content')
     <!-- page title area start -->
@@ -35,7 +30,7 @@
                     <ul class="breadcrumbs pull-left">
                         <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                         <li><a href="{{ route('pin-codes.index') }}">All Pincode</a></li>
-                        <li><span>Create City</span></li>
+                        <li><span>Create Pincode</span></li>
                     </ul>
                 </div>
             </div>
@@ -52,7 +47,7 @@
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
-                        {!! Form::open(['route'=>'pin-codes.store','method'=>'post']) !!}
+                        {!! Form::model($pinCode,['route'=>['pin-codes.update',$pinCode],'method'=>'PUT']) !!}
                             <div class="row">
                                 <div class="col-md-6">
                                     <h4 class="header-title">Manage Pincode</h4>
@@ -69,21 +64,15 @@
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {!! Form::label('state_id', 'State Name') !!}
-                                        {!! Form::select('state_id',$state, null , ['class'=>'form-control']) !!}
-                                    </div>
-
-                                    <div class="col-md-6">
                                         {!! Form::label('district_id', 'District Name') !!}
-                                        {!! Form::select('district_id',[''=>'Select District'], null , ['class'=>'form-control']) !!}
+                                        {!! Form::select('district_id',App\Models\District::pluck('name','id'), null , ['class'=>'form-control']) !!}
                                     </div>
-                                   
-                                </div>
-                                <div class="row">
                                     <div class="col-md-6">
                                         {!! Form::label('pincode', 'Pincode') !!}
                                         {!! Form::text('pincode', null , ['class'=>'form-control']) !!}
                                     </div>
+                                </div>
+                                <div class="row">
                                     <div class="col-md-6">
                                         {!! Form::label('status', 'Status') !!}
                                         {!! Form::select('status',['Active' => 'Active', 'In Active'=>'In Active'], null , ['class'=>'form-control ']) !!}
@@ -108,33 +97,7 @@
             if (typeof $(this).val() == 'string') {
                 $(this).val($(this).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '').substring(0,10));
             }
-        });
-
-        $("#state_id").on("change",function(){
-            var stateId = $(this).val();
-            $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: '/admin/districts-list',
-                    type: 'POST',
-                    data: {
-                        state:stateId
-                    },
-                    success: function (response) { 
-                        var options = "<option value=''> Select State</option>";
-                        for (const key in response) {
-                            if (response.hasOwnProperty.call(response, key)) {
-                                const element = response[key];
-                                options += "<option value='"+key+"'>"+element+"</option>";
-                                
-                            }
-                        }
-                        $("#district_id").empty().append(options);
-                    }
-                }); 
+            console.log("called ",typeof $(this).val() , $(this).val().replace(/[^a-z0-9\s]/gi, '').replace(/[_\s]/g, '').substring(0,10));
         });
     </script>
 @endsection

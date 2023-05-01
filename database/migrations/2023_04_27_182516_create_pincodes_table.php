@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('pincodes', function (Blueprint $table) {
             $table->id();
             $table->string('pincode');
+            $table->bigInteger('state_id');
             $table->bigInteger('district_id');
             $table->string('status')->nullable();
             $table->bigInteger('created_by')->nullable();

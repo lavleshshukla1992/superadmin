@@ -13,18 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('memeberships', function (Blueprint $table) {
+        Schema::create('feedback', function (Blueprint $table) {
             $table->id();
-            $table->date('validity_from')->nullable();
-            $table->date('validity_to')->nullable();
-            $table->bigInteger('user_id')->nullable();
-            $table->string('membership_id')->nullable();
+            $table->string('name')->nullable();
+            $table->string('subject')->nullable();
+            $table->text('media')->nullable();
+            $table->text('message')->nullable();
+            $table->bigInteger('membership_id')->nullable();
             $table->bigInteger('created_by')->nullable();
             $table->bigInteger('updated_by')->nullable();
             $table->softDeletes();
-            $table->timestamps();
+            $table->timestamps();        
         });
     }
+
     /**
      * Reverse the migrations.
      *
@@ -32,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('memeberships');
+        Schema::dropIfExists('feedback');
     }
 };
