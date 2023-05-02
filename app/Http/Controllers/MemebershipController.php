@@ -17,9 +17,9 @@ class MemebershipController extends Controller
      */
     public function index()
     {
-        $marketPlaces = Memebership::select(['id','name','description','status'])->toBase()->get();
-        $marketPlaces = !is_null($marketPlaces) ? json_decode(json_encode($marketPlaces),true) : [];
-        return view('backend.pages.memberships.index',compact('marketPlaces'));
+        $memeberships = Memebership::select(['id','validity_from','validity_to','membership_id','status'])->toBase()->get();
+        $memeberships = !is_null($memeberships) ? json_decode(json_encode($memeberships),true) : [];
+        return view('backend.pages.memberships.index',compact('memeberships'));
     }
 
     /**

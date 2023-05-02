@@ -2,16 +2,18 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\API\OTPController;
+use App\Http\Controllers\API\AdAPIController;
 use App\Http\Controllers\VendorApiController;
+use App\Http\Controllers\MemebershipController;
 use App\Http\Controllers\API\LoginAPIController;
 use App\Http\Controllers\API\StateApiController;
 use App\Http\Controllers\API\PincodeAPIController;
 use App\Http\Controllers\API\DistrictApiController;
+use App\Http\Controllers\API\FeedbackAPIController;
 use App\Http\Controllers\API\VendorDetailController;
-use App\Http\Controllers\MemebershipController;
+use App\Http\Controllers\API\FeedbackConversationAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +31,14 @@ use App\Http\Controllers\MemebershipController;
     // });
     
     // Route::post('/add-vendor' , [VendorApiController::class,'addVendor']);
+Route::get('ads-list',[AdAPIController::class,'getActiveAds']);
+
+Route::post('feedback-store',[FeedbackAPIController::class,'store']);
+Route::get('feedback-detail/{feedback}',[FeedbackAPIController::class,'show']);
+
+Route::post('feedback-conversation-store',[FeedbackConversationAPIController::class,'store']);
+Route::get('feedback-conversation-details/{feedbackConversation}',[FeedbackConversationAPIController::class,'show']);
+
 
 Route::get('/add-customer' , [ApiController::class,'addCustomer']);
 
@@ -75,4 +85,3 @@ Route::apiResource('sub-categories',SubCategoryApiController::class)->only([
     'index', 'show'
 ]);
 
-Route::get('ads-list',AdAPIController::class);

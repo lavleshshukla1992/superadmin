@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\FeedbackResource;
-use App\Models\Feedback;
+use App\Models\FeedbackConversation;
 use Illuminate\Http\Request;
 
-class FeedbackController extends Controller
+class FeedbackConversationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +14,7 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        $feedbacks = Feedback::select(['id','name','membership_id','subject','media','message'])->get();
-        $feedbacks = !is_null($feedbacks) ? json_decode(json_encode($feedbacks),true) : [];
-        return view('backend.pages.feedback.index',compact('feedbacks'));
+        //
     }
 
     /**
@@ -38,28 +35,27 @@ class FeedbackController extends Controller
      */
     public function store(Request $request)
     {
-        $feedback = Feedback::create($request->all());
-        return response()->json(['status_code' => 200,'success' => true,"message" => "Feedback added successfully", 'feedback_id'=>$feedback->id]);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Feedback  $feedback
+     * @param  \App\Models\FeedbackConversation  $feedbackConversation
      * @return \Illuminate\Http\Response
      */
-    public function show(Feedback $feedback)
+    public function show(FeedbackConversation $feedbackConversation)
     {
-        return response()->json(['status_code' => 200,'success' => true,"message" => "Feedback added successfully", 'data'=> new FeedbackResource($feedback)]);
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Feedback  $feedback
+     * @param  \App\Models\FeedbackConversation  $feedbackConversation
      * @return \Illuminate\Http\Response
      */
-    public function edit(Feedback $feedback)
+    public function edit(FeedbackConversation $feedbackConversation)
     {
         //
     }
@@ -68,10 +64,10 @@ class FeedbackController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Feedback  $feedback
+     * @param  \App\Models\FeedbackConversation  $feedbackConversation
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Feedback $feedback)
+    public function update(Request $request, FeedbackConversation $feedbackConversation)
     {
         //
     }
@@ -79,10 +75,10 @@ class FeedbackController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Feedback  $feedback
+     * @param  \App\Models\FeedbackConversation  $feedbackConversation
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Feedback $feedback)
+    public function destroy(FeedbackConversation $feedbackConversation)
     {
         //
     }

@@ -171,7 +171,7 @@
                             </span></a>
                             <ul class="collapse {{ Route::is('memberships.create') || Route::is('memberships.index') || Route::is('memberships.edit') || Route::is('memberships.show') ? 'in' : '' }}">
                                 @if ($usr->can('membership.create'))
-                                    <li class="{{ Route::is('memberships.create')  ? 'active' : '' }}"><a href="{{ route('memberships.create') }}">View / Apply</a></li>
+                                    <li class="{{ Route::is('memberships.create')  ? 'active' : '' }}"><a href="{{ route('memberships.index') }}">View / Apply</a></li>
                                 @endif
                                 @if ($usr->can('membership.view'))
                                     <li class="{{ Route::is('memberships.create')  || Route::is('memberships.edit') ? 'active' : '' }}"><a href="{{ route('memberships.create') }}">Subscription</a></li>

@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-    Vending - Admin Panel
+    Membership - Admin Panel
 @endsection
 
 @section('styles')
@@ -19,10 +19,10 @@
         <div class="row align-items-center">
             <div class="col-sm-6">
                 <div class="breadcrumbs-area clearfix">
-                    <h4 class="page-title pull-left">Vending</h4>
+                    <h4 class="page-title pull-left">Membership</h4>
                     <ul class="breadcrumbs pull-left">
                         <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li><span>All Vending</span></li>
+                        <li><span>All Membership</span></li>
                     </ul>
                 </div>
             </div>
@@ -39,7 +39,7 @@
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="header-title float-left">Vending List</h4>
+                        <h4 class="header-title float-left">Membership List</h4>
                         <div class="clearfix"></div>
                         <div class="data-tables">
                             @include('backend.layouts.partials.messages')
@@ -47,36 +47,28 @@
                                 <thead class="bg-light text-capitalize">
                                     <tr>
                                         <th width="2%">Sr. No</th>
-                                        <th width="3%">Name</th>
-                                        <th width="5%">Description </th>
+                                        <th width="3%">Member </th>
+                                        <th width="5%">Validity From </th>
+                                        <th width="5%">Validity To </th>
                                         <th width="5%">Status</th>
                                         <th width="5%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($vendings as $key=> $vending)
+                                    @foreach ($memeberships as $key=> $memebership)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $vending['name'] }}</td>
-                                            <td>{{ $vending['description'] }}</td>
-                                            <td>{{ $vending['status'] }}</td>
+                                            <td>{{ $memebership['membership_id'] }}</td>
+                                            <td>{{ $memebership['validity_to'] }}</td>
+                                            <td>{{ $memebership['validity_from'] }}</td>
+                                            <td>{{ $memebership['status'] }}</td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <div class="btn-group mr-2">
-                                                        <a href="{{route('vending.edit',$vending['id'])}}" type="btn" class="btn btn-sm btn-outline-secondary pr-2"> 
-                                                            Edit <i class="fa-solid fa-pen-to-square"></i>
+                                                        <a href="{{route('memberships.show',$memebership['id'])}}" type="btn" class="btn btn-sm btn-outline-secondary pr-2"> 
+                                                            Show  <i class="fa-solid fa-eye-to-square"></i>
                                                         </a>
-                                                    </div>
-                                                    <div class="btn-group mr-2">
-                                                        <form method="post" action="{{route('vending.destroy',$vending['id'])}}">
-                                                            @method('delete')
-                                                            @csrf
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm">
-                                                                Delete <i class="fa-solid fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
-                                                   
+                                                    </div>       
                                                 </div>  
                                             </td>
                                         </tr>

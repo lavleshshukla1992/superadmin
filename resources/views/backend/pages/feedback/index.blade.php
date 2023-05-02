@@ -66,11 +66,11 @@
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <div class="btn-group mr-2">
-                                                        <a href="{{route('pin-codes.show',$feedback['id'])}}" type="btn" class="btn btn-sm btn-outline-secondary pr-2"> 
-                                                            Edit <i class="fa-solid fa-eye-to-square"></i>
+                                                        <a href="{{route('feedback.show',$feedback['id'])}}" type="btn" class="btn btn-sm btn-outline-secondary pr-2"> 
+                                                            Show <i class="fa-solid fa-eye-to-square"></i>
                                                         </a>
                                                     </div>
-                                                   
+                                                    
                                                 </div>  
                                             </td>
                                         </tr>
