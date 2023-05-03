@@ -43,7 +43,7 @@ Route::get('feedback-conversation-details/{feedbackConversation}',[FeedbackConve
 
 Route::get('/add-customer' , [ApiController::class,'addCustomer']);
 
-Route::get('/panchayat-list' , [PanchayatController::class,'getList']);
+Route::post('/panchayat-list' , [PanchayatController::class,'getList']);
 
 
 // Route::apiResource('vendor-details',VendorDetailController::class);
