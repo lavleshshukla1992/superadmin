@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\API\OTPController;
 use App\Http\Controllers\API\AdAPIController;
+use App\Http\Controllers\PanchayatController;
 use App\Http\Controllers\VendorApiController;
 use App\Http\Controllers\MemebershipController;
 use App\Http\Controllers\API\LoginAPIController;
@@ -41,6 +42,9 @@ Route::get('feedback-conversation-details/{feedbackConversation}',[FeedbackConve
 
 
 Route::get('/add-customer' , [ApiController::class,'addCustomer']);
+
+Route::get('/panchayat-list' , [PanchayatController::class,'getList']);
+
 
 // Route::apiResource('vendor-details',VendorDetailController::class);
 

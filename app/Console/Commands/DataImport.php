@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\State;
 use App\Models\Pincode;
 use App\Models\District;
+use App\Models\Panchayat;
 use Illuminate\Console\Command;
 
 class DataImport extends Command
@@ -31,7 +32,7 @@ class DataImport extends Command
     public function handle()
     {
         // return Command::SUCCESS;
-        $filename = public_path('State_District_Pincode.csv');
+        $filename = public_path('Municipality_Panchayat_AllState.csv');
         $delimiter = ',';
 
         if (!file_exists($filename) || !is_readable($filename))
@@ -59,6 +60,12 @@ class DataImport extends Command
         {
 
             try {
+                // Panchayat::create([
+                //     'name' => $row['Panchayat'],
+                //     'state_id' => $row['SateId'],
+                //     'status' => 'Active'
+                // ]);
+
                 $state = State::firstOrCreate([
                     'name' => $row['StateName'],
                     'country_id' => '1'
