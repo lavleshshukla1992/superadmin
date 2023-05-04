@@ -92,4 +92,16 @@ class PanchayatController extends Controller
         $panchayat = Panchayat::where('state_id',$stateId)->select('id','name','state_id','status')->orderBy('name','ASC')->get();
         return response()->json(['status_code' => 200,'success' => true,"message" => "Panchayat List Loaded successfully", 'data'=> new PanchayatCollection($panchayat)]);
     }
+
+    public function panchayatListStateWise(Request $request)
+    {
+        $stateId = $request->get('state');
+        $result = [];
+
+        if (! is_null($stateId)) 
+        {
+           $result = Panchayat::where('state_id',$stateId)->pluck('name','id')->toArray();
+        }
+       return $result;
+    }
 }

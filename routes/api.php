@@ -13,7 +13,9 @@ use App\Http\Controllers\API\StateApiController;
 use App\Http\Controllers\API\PincodeAPIController;
 use App\Http\Controllers\API\DistrictApiController;
 use App\Http\Controllers\API\FeedbackAPIController;
+use App\Http\Controllers\API\TrainingAPIController;
 use App\Http\Controllers\API\VendorDetailController;
+use App\Http\Controllers\API\NotificationAPIController;
 use App\Http\Controllers\API\FeedbackConversationAPIController;
 
 /*
@@ -39,6 +41,14 @@ Route::get('feedback-detail/{feedback}',[FeedbackAPIController::class,'show']);
 
 Route::post('feedback-conversation-store',[FeedbackConversationAPIController::class,'store']);
 Route::get('feedback-conversation-details/{feedbackConversation}',[FeedbackConversationAPIController::class,'show']);
+
+Route::get('/training-list' , [TrainingAPIController::class,'getTrainingList']);
+Route::get('/training-detail/{training}' , [TrainingAPIController::class,'getTrainingDetail']);
+
+
+Route::get('/notification-list' , [NotificationAPIController::class,'getNotificationList']);
+Route::get('/notification-detail/{notification}' , [NotificationAPIController::class,'getNotificationDetail']);
+
 
 
 Route::get('/add-customer' , [ApiController::class,'addCustomer']);

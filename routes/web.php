@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\PincodeController;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StateController;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use App\Models\Admin;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Permission;
+use App\Http\Controllers\StateController;
+use App\Http\Controllers\PincodeController;
+use App\Http\Controllers\PanchayatController;
 
 
 /*
@@ -39,6 +40,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('admins', 'Backend\AdminsController', ['names' => 'admin.admins']);
 
     Route::post('districts-list',[PincodeController::class,'getDistrictList']);
+    Route::post('panchayat-list',[PanchayatController::class,'panchayatListStateWise']);
+
+    // panchayat-list
     // Login Routes
     Route::get('/login', 'Backend\Auth\LoginController@showLoginForm')->name('admin.login');
     Route::post('/login/submit', 'Backend\Auth\LoginController@login')->name('admin.login.submit');
@@ -51,6 +55,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('/password/reset/submit', 'Backend\Auth\ForgetPasswordController@reset')->name('admin.password.update');
 
     // Ads
+    Route::resource('notifications', 'NotificationController');
+    Route::resource('training', 'TrainingController');
+    Route::resource('scheme', 'SchemeController');
     Route::resource('feedback', 'FeedbackController');
     Route::resource('ad', 'Backend\AdController', ['names' => 'admin.ad']);
     Route::resource('country', 'CountryController');
@@ -110,15 +117,48 @@ Route::get('/test',function(){
         //         'membership.approve',
         //     ]
         // ],
+        // [
+        //     'group_name' => 'feedback',
+        //     'permissions' => [
+        //         // role Permissions
+        //         'feedback.create',
+        //         'feedback.view',
+        //         'feedback.edit',
+        //         'feedback.delete',
+        //         'feedback.approve',
+        //     ]
+        // ],
         [
-            'group_name' => 'feedback',
+            'group_name' => 'training',
             'permissions' => [
                 // role Permissions
-                'feedback.create',
-                'feedback.view',
-                'feedback.edit',
-                'feedback.delete',
-                'feedback.approve',
+                'training.create',
+                'training.view',
+                'training.edit',
+                'training.delete',
+                'training.approve',
+            ]
+        ],
+        [
+            'group_name' => 'notification',
+            'permissions' => [
+                // role Permissions
+                'notification.create',
+                'notification.view',
+                'notification.edit',
+                'notification.delete',
+                'notification.approve',
+            ]
+        ],
+        [
+            'group_name' => 'scheme',
+            'permissions' => [
+                // role Permissions
+                'scheme.create',
+                'scheme.view',
+                'scheme.edit',
+                'scheme.delete',
+                'scheme.approve',
             ]
         ],
     ];

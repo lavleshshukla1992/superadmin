@@ -194,6 +194,36 @@
                             </ul>
                         </li>
                     @endif
+                    @if ($usr->can('training.create') || $usr->can('training.view') ||  $usr->can('training.edit') ||  $usr->can('training.delete'))
+                        <li>
+                            <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
+                                Training
+                            </span></a>
+                            <ul class="collapse {{ Route::is('training.create') || Route::is('training.index') || Route::is('training.edit') || Route::is('training.show') ? 'in' : '' }}">
+                                @if ($usr->can('training.create'))
+                                    <li class="{{ Route::is('training.index')  ? 'active' : '' }}"><a href="{{ route('training.index') }}">Training</a></li>
+                                @endif
+                                @if ($usr->can('training.view'))
+                                    <li class="{{ Route::is('training.create')  || Route::is('training.edit') ? 'active' : '' }}"><a href="{{ route('training.create') }}">Add Training </a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+                    @if ($usr->can('notification.create') || $usr->can('notification.view') ||  $usr->can('notification.edit') ||  $usr->can('notification.delete'))
+                    <li>
+                        <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
+                            Notification
+                        </span></a>
+                        <ul class="collapse {{ Route::is('notifications.create') || Route::is('notifications.index') || Route::is('notifications.edit') || Route::is('notifications.show') ? 'in' : '' }}">
+                            @if ($usr->can('notification.create'))
+                                <li class="{{ Route::is('notifications.index')  ? 'active' : '' }}"><a href="{{ route('notifications.index') }}">Notification</a></li>
+                            @endif
+                            @if ($usr->can('notification.view'))
+                                <li class="{{ Route::is('notifications.create')  || Route::is('notifications.edit') ? 'active' : '' }}"><a href="{{ route('notifications.create') }}">Add Notification </a></li>
+                            @endif
+                        </ul>
+                    </li>
+                @endif
 
                 </ul>
             </nav>
