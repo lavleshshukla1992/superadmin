@@ -210,16 +210,31 @@
                         </li>
                     @endif
                     @if ($usr->can('notification.create') || $usr->can('notification.view') ||  $usr->can('notification.edit') ||  $usr->can('notification.delete'))
+                        <li>
+                            <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
+                                Notification
+                            </span></a>
+                            <ul class="collapse {{ Route::is('notifications.create') || Route::is('notifications.index') || Route::is('notifications.edit') || Route::is('notifications.show') ? 'in' : '' }}">
+                                @if ($usr->can('notification.create'))
+                                    <li class="{{ Route::is('notifications.index')  ? 'active' : '' }}"><a href="{{ route('notifications.index') }}">Notification</a></li>
+                                @endif
+                                @if ($usr->can('notification.view'))
+                                    <li class="{{ Route::is('notifications.create')  || Route::is('notifications.edit') ? 'active' : '' }}"><a href="{{ route('notifications.create') }}">Add Notification </a></li>
+                                @endif
+                            </ul>
+                        </li>
+                    @endif
+                    @if ($usr->can('scheme.create') || $usr->can('scheme.view') ||  $usr->can('scheme.edit') ||  $usr->can('scheme.delete'))
                     <li>
                         <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
-                            Notification
+                            Scheme
                         </span></a>
-                        <ul class="collapse {{ Route::is('notifications.create') || Route::is('notifications.index') || Route::is('notifications.edit') || Route::is('notifications.show') ? 'in' : '' }}">
-                            @if ($usr->can('notification.create'))
-                                <li class="{{ Route::is('notifications.index')  ? 'active' : '' }}"><a href="{{ route('notifications.index') }}">Notification</a></li>
+                        <ul class="collapse {{ Route::is('scheme.create') || Route::is('scheme.index') || Route::is('scheme.edit') || Route::is('scheme.show') ? 'in' : '' }}">
+                            @if ($usr->can('scheme.create'))
+                                <li class="{{ Route::is('scheme.index')  ? 'active' : '' }}"><a href="{{ route('scheme.index') }}">Scheme</a></li>
                             @endif
-                            @if ($usr->can('notification.view'))
-                                <li class="{{ Route::is('notifications.create')  || Route::is('notifications.edit') ? 'active' : '' }}"><a href="{{ route('notifications.create') }}">Add Notification </a></li>
+                            @if ($usr->can('scheme.view'))
+                                <li class="{{ Route::is('scheme.create')  || Route::is('scheme.edit') ? 'active' : '' }}"><a href="{{ route('scheme.create') }}">Add Scheme  </a></li>
                             @endif
                         </ul>
                     </li>

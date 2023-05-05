@@ -10,6 +10,7 @@ use App\Http\Controllers\VendorApiController;
 use App\Http\Controllers\MemebershipController;
 use App\Http\Controllers\API\LoginAPIController;
 use App\Http\Controllers\API\StateApiController;
+use App\Http\Controllers\API\SchemeAPIController;
 use App\Http\Controllers\API\PincodeAPIController;
 use App\Http\Controllers\API\DistrictApiController;
 use App\Http\Controllers\API\FeedbackAPIController;
@@ -90,12 +91,13 @@ Route::get('state-list',[StateApiController::class,'index']);
 
 Route::post('district-list',[DistrictApiController::class,'index']);
 
+Route::get('scheme-list',[SchemeAPIController::class,'index']);
+Route::get('scheme-detail/{scheme}',[SchemeAPIController::class,'show']);
 
-Route::apiResource('categories',CategoryApiController::class)->only([
-    'index', 'show'
-]);
 
-Route::apiResource('sub-categories',SubCategoryApiController::class)->only([
-    'index', 'show'
-]);
+// Route::apiResource('sub-categories',SubCategoryApiController::class)->only([
+//     'index', 'show'
+// ]);
+
+
 

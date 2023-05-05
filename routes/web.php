@@ -63,8 +63,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('country', 'CountryController');
     Route::resource('state', 'StateController');
     Route::resource('district', 'DistrictController');
-    Route::resource('categories', 'CategoryController');
-    Route::resource('sub-categories', 'SubCategoryController');
+    // Route::resource('categories', 'CategoryController');
+    // Route::resource('sub-categories', 'SubCategoryController');
     Route::resource('pin-codes', 'PincodeController')->parameter('pin-codes','pinCode');
     Route::resource('market-places', 'MarketPlaceController')->parameter('market-places','marketPlace');
     Route::resource('vending', 'VendingController');

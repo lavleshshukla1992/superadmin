@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-    NotiFication - Admin Panel
+    Scheme - Admin Panel
 @endsection
 
 @section('styles')
@@ -19,10 +19,10 @@
         <div class="row align-items-center">
             <div class="col-sm-6">
                 <div class="breadcrumbs-area clearfix">
-                    <h4 class="page-title pull-left">NotiFication</h4>
+                    <h4 class="page-title pull-left">Scheme</h4>
                     <ul class="breadcrumbs pull-left">
                         <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li><span>All NotiFication</span></li>
+                        <li><span>All Scheme</span></li>
                     </ul>
                 </div>
             </div>
@@ -39,7 +39,7 @@
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="header-title float-left">NotiFication List</h4>
+                        <h4 class="header-title float-left">Scheme List</h4>
                         <div class="clearfix"></div>
                         <div class="data-tables">
                             @include('backend.layouts.partials.messages')
@@ -47,30 +47,28 @@
                                 <thead class="bg-light text-capitalize">
                                     <tr>
                                         <th width="2%">Sr. No</th>
-                                        <th width="5%">Title</th>
-                                        <th width="3%">Sent At</th>
-                                        <th width="3%">Type</th>
+                                        <th width="5%">Name</th>
+                                        <th width="3%">Description</th>
                                         <th width="2%">Status</th>
                                         <th width="5%">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($notifications as $key=> $notification)
+                                    @foreach ($schemes as $key=> $scheme)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $notification['title'] }}</td>
-                                            <td>{{ $notification['sent_at'] }}</td>
-                                            <td>{{ $notification['type'] }}</td>
-                                            <td>{{ $notification['status'] }}</td>
+                                            <td>{{ $scheme['name'] }}</td>
+                                            <td>{{ $scheme['description'] }}</td>
+                                            <td>{{ $scheme['status'] }}</td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <div class="btn-group mr-2">
-                                                        <a href="{{route('notifications.edit',$notification['id'])}}" type="btn" class="btn btn-sm btn-outline-secondary pr-2"> 
+                                                        <a href="{{route('scheme.edit',$scheme['id'])}}" type="btn" class="btn btn-sm btn-outline-secondary pr-2"> 
                                                             Edit <i class="fa-solid fa-pen-to-square"></i>
                                                         </a>
                                                     </div>
                                                     <div class="btn-group mr-2">
-                                                        <form method="post" action="{{route('notifications.destroy',$notification['id'])}}">
+                                                        <form method="post" action="{{route('scheme.destroy',$scheme['id'])}}">
                                                             @method('delete')
                                                             @csrf
                                                             <button type="submit" class="btn btn-outline-danger btn-sm">

@@ -14,7 +14,9 @@ class SchemeController extends Controller
      */
     public function index()
     {
-        //
+        $schemes = Scheme::all('id','name','description','status')->toArray();
+        $schemes = !is_null($schemes) ? json_decode(json_encode($schemes),true): [];
+        return view('backend.pages.scheme.index',compact('schemes'));
     }
 
     /**
@@ -24,7 +26,7 @@ class SchemeController extends Controller
      */
     public function create()
     {
-        //
+        return view('backend.pages.scheme.create');
     }
 
     /**
@@ -35,7 +37,8 @@ class SchemeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Scheme::create($request->all());
+        return redirect()->route('scheme.index');
     }
 
     /**
@@ -57,7 +60,7 @@ class SchemeController extends Controller
      */
     public function edit(Scheme $scheme)
     {
-        //
+        return view('backend.pages.scheme.edit',compact('scheme'));
     }
 
     /**
@@ -69,7 +72,10 @@ class SchemeController extends Controller
      */
     public function update(Request $request, Scheme $scheme)
     {
-        //
+        $scheme->fill($request->all());
+        $scheme->save();
+        return redirect()->route('scheme.index');
+        
     }
 
     /**
@@ -80,6 +86,8 @@ class SchemeController extends Controller
      */
     public function destroy(Scheme $scheme)
     {
-        //
+        $scheme->delete();
+        return redirect()->route('scheme.index');
+        
     }
 }

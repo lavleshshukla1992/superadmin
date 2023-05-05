@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Error\Notice;
 
 class NotificationController extends Controller
 {
@@ -39,7 +40,7 @@ class NotificationController extends Controller
     public function store(Request $request)
     {
         Notification::create($request->all());
-        return redirect()->route('notification.index');
+        return redirect()->route('notifications.index');
     }
 
     /**
@@ -74,7 +75,10 @@ class NotificationController extends Controller
      */
     public function update(Request $request, Notification $notification)
     {
-        //
+        $notification->fill($request->all());
+        $notification->save();
+        return redirect()->route('notifications.index');
+
     }
 
     /**
@@ -85,6 +89,7 @@ class NotificationController extends Controller
      */
     public function destroy(Notification $notification)
     {
-        //
+        $notification->delete();
+        return redirect()->route('notifications.index');
     }
 }

@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-    NotiFication Create - Admin Panel
+    Scheme Create - Admin Panel
 @endsection
 
 @section('styles')
@@ -25,11 +25,11 @@
         <div class="row align-items-center">
             <div class="col-sm-6">
                 <div class="breadcrumbs-area clearfix">
-                    <h4 class="page-title pull-left">NotiFication Create</h4>
+                    <h4 class="page-title pull-left">Scheme Create</h4>
                     <ul class="breadcrumbs pull-left">
                         <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li><a href="{{ route('notifications.index') }}">All NotiFication</a></li>
-                        <li><span>Create NotiFication</span></li>
+                        <li><a href="{{ route('scheme.index') }}">All Scheme</a></li>
+                        <li><span>Create Scheme</span></li>
                     </ul>
                 </div>
             </div>
@@ -46,10 +46,10 @@
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
-                        {!! Form::model($notification,['route'=>['notifications.update',$notification],'method'=>'PATCH']) !!}
+                        {!! Form::model($scheme,['route'=>['scheme.update',$scheme],'method'=>'PATCH']) !!}
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4 class="header-title">Manage NotiFication</h4>
+                                    <h4 class="header-title">Manage Scheme</h4>
 
                                 </div>
                                 <div class="col-md-6">
@@ -64,25 +64,20 @@
                                 <div class="row">
                                     
                                     <div class="col-md-6">
-                                        {!! Form::label('title', 'Title') !!}
-                                        {!! Form::text('title', null , ['class'=>'form-control']) !!}
+                                        {!! Form::label('name', 'Name') !!}
+                                        {!! Form::text('name', null , ['class'=>'form-control']) !!}
                                     </div>
-                                    {{-- all_state --}}
-                                    <div class="col-md-6">
-                                        {!! Form::label('sent_at', 'Sent At') !!}
-                                        {!! Form::date('sent_at', null , ['class'=>'form-control']) !!}
-
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {!! Form::label('type', 'Type') !!}
-                                        {!! Form::select('type',['Training' => 'Training','SignUp'=>'SignUp'], null , ['class'=>'form-control']) !!}
-                                    </div>
-                                    
                                     <div class="col-md-6">
                                         {!! Form::label('status', 'Status') !!}
                                         {!! Form::select('status',['Active' => 'Active', 'In Active'=>'In Active'], null , ['class'=>'form-control ']) !!}
+                                    </div>
+                                    
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        {!! Form::label('description', 'Description') !!}
+                                        {!! Form::textarea('description', null , ['class'=>'form-control']) !!}
+
                                     </div>
                                     
                                 </div>
