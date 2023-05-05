@@ -56,7 +56,7 @@ class MemebershipController extends Controller
      */
     public function show(Memebership $memebership)
     {
-        return response()->json(['success' => true,'status_code' =>200 , 'message' => 'Vendor detail loaded Successfully','data'=> new MembershipResource($memebership)]);
+        return response()->json(['success' => true,'status_code' =>200 , 'message' => 'Membership detail loaded Successfully','data'=> new MembershipResource($memebership)]);
     }
 
     /**
