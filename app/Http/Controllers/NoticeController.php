@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Scheme;
+use App\Models\Notice;
 use Illuminate\Http\Request;
 
-class SchemeController extends Controller
+class NoticeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +14,9 @@ class SchemeController extends Controller
      */
     public function index()
     {
-        $schemes = Scheme::all('id','name','created_by','updated_by','start_at','end_at','status')->toArray();
-        $schemes = !is_null($schemes) ? json_decode(json_encode($schemes),true): [];
-        return view('backend.pages.scheme.index',compact('schemes'));
+        $notices = Notice::all('id','name','created_by','updated_by')->toArray();
+        $notices = !is_null($notices) ? json_decode(json_encode($notices),true): [];
+        return view('backend.pages.notice.index',compact('notices'));
     }
 
     /**
@@ -26,7 +26,7 @@ class SchemeController extends Controller
      */
     public function create()
     {
-        return view('backend.pages.scheme.create');
+        return view('backend.pages.notice.create');
     }
 
     /**
@@ -45,40 +45,40 @@ class SchemeController extends Controller
             $media->move('uploads', $mediaName);
             $input['media'] = $mediaName;
         }
-        Scheme::create($input);
-        return redirect()->route('scheme.index');
+        Notice::create($input);
+        return redirect()->route('notice.index');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Scheme  $scheme
+     * @param  \App\Models\Notice  $notice
      * @return \Illuminate\Http\Response
      */
-    public function show(Scheme $scheme)
+    public function show(Notice $notice)
     {
-        return view('backend.pages.scheme.detail',compact('scheme'));
+        return view('backend.pages.notice.detail',compact('notice'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Scheme  $scheme
+     * @param  \App\Models\Notice  $notice
      * @return \Illuminate\Http\Response
      */
-    public function edit(Scheme $scheme)
+    public function edit(Notice $notice)
     {
-        return view('backend.pages.scheme.edit',compact('scheme'));
+        return view('backend.pages.notice.edit',compact('notice'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Scheme  $scheme
+     * @param  \App\Models\Notice  $notice
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Scheme $scheme)
+    public function update(Request $request, Notice $notice)
     {
         $media = $request->file('media');
         $input = $request->all();
@@ -88,22 +88,20 @@ class SchemeController extends Controller
             $media->move('uploads', $mediaName);
             $input['media'] = $mediaName;
         }
-        $scheme->fill($input);
-        $scheme->save();
-        return redirect()->route('scheme.index');
-        
+        $notice->fill($request->all());
+        $notice->save();
+        return redirect()->route('notice.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Scheme  $scheme
+     * @param  \App\Models\Notice  $notice
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Scheme $scheme)
+    public function destroy(Notice $notice)
     {
-        $scheme->delete();
-        return redirect()->route('scheme.index');
-        
+        $notice->delete();
+        return redirect()->route('notice.index');
     }
 }

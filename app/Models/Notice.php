@@ -2,25 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Scheme extends Model
+class Notice extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     public $fillable = [
         'name',
         'description',
+        'media',
         'state_id',
         'district_id',
         'municipality_id',
-        'start_at',
-        'end_at',
         'created_by',
         'updated_by',
-        'media',
         'status'
     ];
 }

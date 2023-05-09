@@ -239,6 +239,21 @@
                         </ul>
                     </li>
                 @endif
+                @if ($usr->can('notice.create') || $usr->can('notice.view') ||  $usr->can('notice.edit') ||  $usr->can('notice.delete'))
+                <li>
+                    <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-tasks"></i><span>
+                        Notice
+                    </span></a>
+                    <ul class="collapse {{ Route::is('notice.create') || Route::is('notice.index') || Route::is('notice.edit') || Route::is('notice.show') ? 'in' : '' }}">
+                        @if ($usr->can('notice.create'))
+                            <li class="{{ Route::is('notice.index')  ? 'active' : '' }}"><a href="{{ route('notice.index') }}">Notice</a></li>
+                        @endif
+                        @if ($usr->can('notice.view'))
+                            <li class="{{ Route::is('notice.create')  || Route::is('notice.edit') ? 'active' : '' }}"><a href="{{ route('notice.create') }}">Add Notice  </a></li>
+                        @endif
+                    </ul>
+                </li>
+            @endif
 
                 </ul>
             </nav>

@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-    Scheme Create - Admin Panel
+    Notice Create - Admin Panel
 @endsection
 
 @section('styles')
@@ -18,7 +18,6 @@
         }
     </style>
 @endsection
-
 @php
     $state = App\Models\State::pluck('name','id')->toArray();
     $state = ['0' => 'All State']+$state;
@@ -29,11 +28,11 @@
         <div class="row align-items-center">
             <div class="col-sm-6">
                 <div class="breadcrumbs-area clearfix">
-                    <h4 class="page-title pull-left">Scheme Create</h4>
+                    <h4 class="page-title pull-left">Notice Create</h4>
                     <ul class="breadcrumbs pull-left">
                         <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li><a href="{{ route('scheme.index') }}">All Scheme</a></li>
-                        <li><span>Create Scheme</span></li>
+                        <li><a href="{{ route('notice.index') }}">All Notice</a></li>
+                        <li><span>Create Notice</span></li>
                     </ul>
                 </div>
             </div>
@@ -50,10 +49,10 @@
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
-                        {!! Form::open(['route'=>'scheme.store','method'=>'post']) !!}
+                        {!! Form::model($notice,['route'=>['notice.update',$notice],'method'=>'PATCH']) !!}
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4 class="header-title">Manage Scheme</h4>
+                                    <h4 class="header-title">Manage Notice</h4>
 
                                 </div>
                                 <div class="col-md-6">
@@ -81,20 +80,10 @@
                                     </div> --}}
                                     
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {!! Form::label('start_at', 'Start At') !!}
-                                        {!! Form::date('start_at', null ,['class' => 'form-control']) !!}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {!! Form::label('end_at', 'End At') !!}
-                                        {!! Form::date('end_at',null, ['class' => 'form-control']) !!}
-                                    </div>
-                                </div>
                                 <div class="row py-4">
                                     <div class="col-md-12">
                                         {!! Form::label('description', 'Description') !!}
-                                        {!! Form::textarea('description', null , ['class'=>'form-control']) !!}
+                                        {!! Form::textarea('description', null , ['class'=>'form-control', 'rows' => '4']) !!}
 
                                     </div>
                                     
@@ -135,80 +124,3 @@
         </div>
     </div>
 @endsection
-@section('scripts')
-
-    <script>
-
-        $("#state_id").on("change",function(){
-            var stateId = $(this).val();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: '/admin/districts-list',
-                type: 'POST',
-                data: {
-                    state:stateId
-                },
-                success: function (response) { 
-                    var options = "<option value='0'> All State</option>";
-                    for (const key in response) {
-                        if (response.hasOwnProperty.call(response, key)) {
-                            const element = response[key];
-                            options += "<option value='"+key+"'>"+element+"</option>";
-                            
-                        }
-                    }
-                    $("#district_id").empty().append(options);
-                }
-            }); 
-            setPanchayat();
-        });
-
-        function setPanchayat() {
-            
-            var stateId = $("#state_id").val();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: '/admin/panchayat-list',
-                type: 'POST',
-                data: {
-                    state:stateId
-                },
-                success: function (response) { 
-                    var options = "<option value='0'> All Panchayat</option>";
-                    for (const key in response) {
-                        if (response.hasOwnProperty.call(response, key)) {
-                            const element = response[key];
-                            options += "<option value='"+key+"'>"+element+"</option>";
-                            
-                        }
-                    }
-                    $("#municipality_id").empty().append(options);
-                }
-            }); 
-        }
-
-        $("#all_state").on("click",function(){
-            if ($(this).prop("checked")) 
-            {
-                $("#district_id").attr("disabled",true);
-                $("#state_id").attr("disabled",true);
-                $("#municipality_id").attr("disabled",true);
-            }
-            else{
-                $("#district_id").removeAttr("disabled",'true');
-                $("#state_id").removeAttr("disabled",'true');
-                $("#municipality_id").removeAttr("disabled",'true');
-
-            }
-        });
-    </script>
-@endsection
-

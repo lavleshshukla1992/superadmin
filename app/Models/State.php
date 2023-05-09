@@ -17,7 +17,7 @@ class State extends Model
         'name',
         'status'
     ];
-
+    protected $primaryKey = 'id';
     public function country()
     {
         return $this->belongsTo(Country::class,'country_id');

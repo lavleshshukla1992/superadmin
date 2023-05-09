@@ -13,24 +13,21 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('trainings', function (Blueprint $table) {
+        Schema::create('notices', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->text('cover_image')->nullable();
+            $table->string('name');
+            $table->text('description');
+            $table->text('media');
 
-            $table->bigInteger('user_id')->nullable();
-            $table->dateTime('training_start_at')->nullable();
-            $table->dateTime('training_end_at')->nullable();
 
-            $table->string('video_type')->nullable();
-            $table->text('video_link')->nullable();
-            $table->text('live_link')->nullable();
-
-            $table->tinyInteger('all_state')->nullable();
+            $table->string('status');
             $table->bigInteger('state_id')->nullable();
             $table->bigInteger('district_id')->nullable();
             $table->bigInteger('municipality_id')->nullable();
-            $table->string('status')->nullable();
+
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
+
             $table->softDeletes();
             $table->timestamps();
         });
@@ -43,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('trainings');
+        Schema::dropIfExists('notices');
     }
 };

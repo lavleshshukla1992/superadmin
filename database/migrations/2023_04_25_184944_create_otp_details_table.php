@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('otp_type',25);
             $table->dateTime('verified_at')->nullable();
             $table->dateTime('expired_at');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

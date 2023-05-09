@@ -18,6 +18,21 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->string('status');
+
+            $table->text('media')->nullable();
+
+            $table->dateTime('start_at')->nullable();
+            $table->dateTime('end_at')->nullable();
+
+            $table->tinyInteger('all_state')->nullable();
+            $table->bigInteger('state_id')->nullable();
+            $table->bigInteger('district_id')->nullable();
+            $table->bigInteger('municipality_id')->nullable();
+
+            $table->bigInteger('created_by')->nullable();
+            $table->bigInteger('updated_by')->nullable();
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

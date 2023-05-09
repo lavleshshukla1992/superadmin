@@ -69,6 +69,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('market-places', 'MarketPlaceController')->parameter('market-places','marketPlace');
     Route::resource('vending', 'VendingController');
     Route::resource('memberships', 'MemebershipController');
+    Route::resource('notice', 'NoticeController'); 
+
 });
 
 Route::get('/test',function(){
@@ -128,37 +130,37 @@ Route::get('/test',function(){
         //         'feedback.approve',
         //     ]
         // ],
+        // [
+        //     'group_name' => 'training',
+        //     'permissions' => [
+        //         // role Permissions
+        //         'training.create',
+        //         'training.view',
+        //         'training.edit',
+        //         'training.delete',
+        //         'training.approve',
+        //     ]
+        // ],
+        // [
+        //     'group_name' => 'notification',
+        //     'permissions' => [
+        //         // role Permissions
+        //         'notification.create',
+        //         'notification.view',
+        //         'notification.edit',
+        //         'notification.delete',
+        //         'notification.approve',
+        //     ]
+        // ],
         [
-            'group_name' => 'training',
+            'group_name' => 'notice',
             'permissions' => [
                 // role Permissions
-                'training.create',
-                'training.view',
-                'training.edit',
-                'training.delete',
-                'training.approve',
-            ]
-        ],
-        [
-            'group_name' => 'notification',
-            'permissions' => [
-                // role Permissions
-                'notification.create',
-                'notification.view',
-                'notification.edit',
-                'notification.delete',
-                'notification.approve',
-            ]
-        ],
-        [
-            'group_name' => 'scheme',
-            'permissions' => [
-                // role Permissions
-                'scheme.create',
-                'scheme.view',
-                'scheme.edit',
-                'scheme.delete',
-                'scheme.approve',
+                'notice.create',
+                'notice.view',
+                'notice.edit',
+                'notice.delete',
+                'notice.approve',
             ]
         ],
     ];

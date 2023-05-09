@@ -1,7 +1,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-    Training Create - Admin Panel
+    Notice Create - Admin Panel
 @endsection
 
 @section('styles')
@@ -22,18 +22,18 @@
 @php
     $state = App\Models\State::pluck('name','id')->toArray();
     $state = ['0' => 'All State']+$state;
-@endphp
+@endphp 
 @section('admin-content')
     <!-- page title area start -->
     <div class="page-title-area">
         <div class="row align-items-center">
             <div class="col-sm-6">
                 <div class="breadcrumbs-area clearfix">
-                    <h4 class="page-title pull-left">Training Create</h4>
+                    <h4 class="page-title pull-left">Notice Create</h4>
                     <ul class="breadcrumbs pull-left">
                         <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
-                        <li><a href="{{ route('training.index') }}">All Training</a></li>
-                        <li><span>Create Training</span></li>
+                        <li><a href="{{ route('notice.index') }}">All Notice</a></li>
+                        <li><span>Create Notice</span></li>
                     </ul>
                 </div>
             </div>
@@ -50,17 +50,19 @@
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
-                        {!! Form::open(['route'=>'training.store','method'=>'post']) !!}
+                        {!! Form::open(['route'=>'notice.store','method'=>'post']) !!}
                             <div class="row">
                                 <div class="col-md-6">
-                                    <h4 class="header-title">Manage Training</h4>
+                                    <h4 class="header-title">Manage Notice</h4>
 
                                 </div>
                                 <div class="col-md-6">
-                                    {!! Form::button ('Start Training', ['class'=>'btn btn-primary float-right' , 'type'=>'submit']) !!}
+                                    {!! Form::button ('Submit', ['class'=>'btn btn-primary float-right' , 'type'=>'submit']) !!}
                                 </div>
                             </div>
                             @include('backend.layouts.partials.messages')
+
+                            {{-- <form action="{{ route('country.store') }}" method="POST" enctype="multipart/form-data"> --}}
                             @csrf
                             <div class="form-group">
                                 <div class="row">
@@ -69,61 +71,45 @@
                                         {!! Form::label('name', 'Name') !!}
                                         {!! Form::text('name', null , ['class'=>'form-control']) !!}
                                     </div>
-                                    {{-- all_state --}}
                                     <div class="col-md-6">
-                                        {!! Form::label('cover_image', 'Cover Image') !!}
-                                        {!! Form::file('cover_image',['class'=>'form-control']) !!}
+                                        {!! Form::label('media', 'Media') !!}
+                                        {!! Form::file('media', ['class' => 'form-control']) !!}
+                                    </div>
+                                    {{-- <div class="col-md-6">
+                                        {!! Form::label('status', 'Status') !!}
+                                        {!! Form::select('status',['Active' => 'Active', 'In Active'=>'In Active'], null , ['class'=>'form-control ']) !!}
+                                    </div> --}}
+                                    
+                                </div>
+                                <div class="row py-4">
+                                    <div class="col-md-12">
+                                        {!! Form::label('description', 'Description') !!}
+                                        {!! Form::textarea('description', null , ['class'=>'form-control', 'rows' => '4']) !!}
 
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {!! Form::label('video_type', 'Insert Video Link') !!}
-                                        {!! Form::radio('video_type', 'video' , ['class'=>'form-control']) !!}
-                                    </div>
-                                    
-                                    <div class="col-md-6">
-                                        {!! Form::label('video_type', 'Go Live') !!}
-                                        {!! Form::radio('video_type', 'Live' , ['class'=>'form-control']) !!}
-                                    </div>
                                     
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        {!! Form::label('video_link', 'Video Link') !!}
-                                        {!! Form::text('video_link', null , ['class'=>'form-control']) !!}
-                                    </div>
-                                    <div class="col-md-6">
-                                        {!! Form::label('live_link', 'Live Link') !!}
-                                        {!! Form::text('live_link', null , ['class'=>'form-control ']) !!}
-                                    </div>
-                                </div>
-                                <hr>
+
+                                <span class=""> {{'Select Audiance'}} </span>
+                                <hr class="mt-0">
+
                                 <div class="row">                                    
-                                    <div class="col-md-6">
-                                        {!! Form::label('all_state', 'All State') !!}
-                                        {!! Form::hidden('all_state', 0 , ['class'=>'form-control']) !!}
-                                        {!! Form::checkbox('all_state', 1 ,false) !!}
-                                    </div>
                                     <div class="col-md-6">
                                         {!! Form::label('state_id', 'State Name') !!}
                                         {!! Form::select('state_id',$state, null , ['class'=>'form-control']) !!}
                                     </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-6">
                                         {!! Form::label('district_id', 'District Name') !!}
                                         {!! Form::select('district_id',['0' => 'All District'], null , ['class'=>'form-control']) !!}
                                     </div>
 
+                                </div>
+                                <div class="row">
+                                   
                                     <div class="col-md-6">
                                         {!! Form::label('municipality_id', 'Panchayat Name') !!}
                                         {!! Form::select('municipality_id',['0' => 'All Panchayat'], null , ['class'=>'form-control']) !!}
                                     </div>
-                                    
-                                </div>
-                                <div class="row">
-                                   
                                     <div class="col-md-6">
                                         {!! Form::label('status', 'Status') !!}
                                         {!! Form::select('status',['Active' => 'Active', 'In Active'=>'In Active'], null , ['class'=>'form-control ']) !!}
@@ -134,6 +120,8 @@
                     </div>
                 </div>
             </div>
+            <!-- data table end -->
+
         </div>
     </div>
 @endsection
@@ -213,3 +201,4 @@
         });
     </script>
 @endsection
+

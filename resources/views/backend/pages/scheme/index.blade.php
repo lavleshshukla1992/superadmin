@@ -48,8 +48,11 @@
                                     <tr>
                                         <th width="2%">Sr. No</th>
                                         <th width="5%">Name</th>
-                                        <th width="3%">Description</th>
-                                        <th width="2%">Status</th>
+                                        <th width="3%">Created By</th>
+                                        <th width="3%">Updated By</th>
+                                        <th width="2%">Start Date</th>
+                                        <th width="2%">End Date</th>
+                                        <th width="5%">Status</th>
                                         <th width="5%">Action</th>
                                     </tr>
                                 </thead>
@@ -58,10 +61,18 @@
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
                                             <td>{{ $scheme['name'] }}</td>
-                                            <td>{{ $scheme['description'] }}</td>
+                                            <td>{{ $scheme['created_by'] }}</td>
+                                            <td>{{ $scheme['updated_by'] }}</td>
+                                            <td>{{ $scheme['start_at'] }}</td>
+                                            <td>{{ $scheme['end_at'] }}</td>
                                             <td>{{ $scheme['status'] }}</td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <div class="btn-group mr-2">
+                                                        <a href="{{route('scheme.show',$scheme['id'])}}" type="btn" class="btn btn-sm btn-outline-secondary pr-2"> 
+                                                            Show <i class="fa-solid fa-eye-to-square"></i>
+                                                        </a>
+                                                    </div>
                                                     <div class="btn-group mr-2">
                                                         <a href="{{route('scheme.edit',$scheme['id'])}}" type="btn" class="btn btn-sm btn-outline-secondary pr-2"> 
                                                             Edit <i class="fa-solid fa-pen-to-square"></i>

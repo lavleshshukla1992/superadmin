@@ -15,11 +15,7 @@ class TrainingController extends Controller
      */
     public function index()
     {
-        $trainings = Training::from('trainings as tr')
-        ->leftJoin('states as st','st.id','=','tr.state_id')
-        ->leftJoin('districts as dt','dt.id','=','tr.district_id')
-        ->leftJoin('panchayats as pt','pt.id','=','tr.municipality_id')
-        ->select(['tr.id','tr.name','tr.status','st.name as state','dt.name as district','pt.name as municipality'])
+        $trainings = Training::select(['id','name','training_start_at','training_end_at','user_id'])
         ->toBase()->get();
         $trainings = !is_null($trainings) ? json_decode(json_encode($trainings),true): [];
         return view('backend.pages.training.index',compact('trainings'));
@@ -43,7 +39,17 @@ class TrainingController extends Controller
      */
     public function store(StoreTrainingRequest $request)
     {
-        Training::create($request->all());
+        $input = $request->all();
+        $media = $request->file('cover_image');
+        $input['training_start_at'] = now();        
+        if (! is_null($media)) 
+        {
+            $mediaName = time().$media->getClientOriginalName();
+            $media->move('uploads', $mediaName);
+            $input['cover_image'] = $mediaName;
+        }
+
+        Training::create($input);
         return redirect()->route('training.index');
     }
 
@@ -55,7 +61,7 @@ class TrainingController extends Controller
      */
     public function show(Training $training)
     {
-        //
+        return view('backend.pages.training.detail',compact('training'));
     }
 
     /**
