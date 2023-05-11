@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NoticeController extends Controller
 {
@@ -57,7 +58,13 @@ class NoticeController extends Controller
      */
     public function show(Notice $notice)
     {
-        return view('backend.pages.notice.detail',compact('notice'));
+
+        $members = DB::table('notice_vendor_detail as nvd')->where('notice_id',$notice->id)
+        ->leftJoin('vendor_details as vd','vd.id','=','nvd.vendor_detail_id')
+        ->select(['vd.vendor_first_name','nvd.status'])->get();
+        $members = !is_null($members) ? json_decode(json_encode($members),true): [];
+
+        return view('backend.pages.notice.detail',compact('notice','members'));
     }
 
     /**

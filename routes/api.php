@@ -46,6 +46,8 @@ Route::get('feedback-conversation-details/{feedbackConversation}',[FeedbackConve
 
 Route::get('/training-list' , [TrainingAPIController::class,'getTrainingList']);
 Route::get('/training-detail/{training}' , [TrainingAPIController::class,'getTrainingDetail']);
+Route::get('/live-training' , [TrainingAPIController::class,'getTrainingList']);
+
 
 
 Route::get('/notification-list' , [NotificationAPIController::class,'getNotificationList']);
@@ -94,6 +96,8 @@ Route::post('district-list',[DistrictApiController::class,'index']);
 
 Route::get('scheme-list',[SchemeAPIController::class,'index']);
 Route::get('scheme-detail/{scheme}',[SchemeAPIController::class,'show']);
+
+Route::get('live-scheme',[SchemeAPIController::class,'index']);
 
 
 // Route::apiResource('sub-categories',SubCategoryApiController::class)->only([

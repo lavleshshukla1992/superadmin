@@ -16,5 +16,7 @@ class Feedback extends Model
         'subject',
         'media',
         'message',
+        'type',
+        'mobile_number'
     ];
 }

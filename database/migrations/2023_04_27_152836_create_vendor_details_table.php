@@ -31,7 +31,9 @@ return new class extends Migration
             $table->string('current_pincode')->nullable();
             $table->string('mobile_no')->nullable();
 
-            $table->string('municipality_panchayat')->nullable();
+            $table->string('municipality_panchayat_birth')->nullable();
+            $table->string('municipality_panchayat_current')->nullable();
+
             $table->string('police_station')->nullable();
 
             $table->tinyInteger('is_current_add_and_birth_add_is_same')->nullable();

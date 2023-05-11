@@ -19,7 +19,9 @@ class FeedbackResource extends JsonResource
             'membership_id' => $this->membership_id,
             'subject' => $this->subject,
             'media' => $this->media,
-            'message' => $this->message
+            'message' => $this->message,
+            'type' => $this->type,
+            'mobile_number' => $this->mobile_number
         ];
     }
 }
