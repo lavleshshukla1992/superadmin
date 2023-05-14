@@ -52,6 +52,7 @@
                                         <th width="5%">Subject</th>
                                         <th width="5%">Media</th>
                                         <th width="5%">Message</th>
+                                        <th width="5%">Type</th>
                                         <th width="5%">Action</th>
                                     </tr>
                                 </thead>
@@ -63,6 +64,7 @@
                                             <td>{{ $feedback['subject'] }}</td>
                                             <td>{{ $feedback['media'] }}</td>
                                             <td>{{ $feedback['message'] }}</td>
+                                            <td>{{ $feedback['type'] }}</td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <div class="btn-group mr-2">

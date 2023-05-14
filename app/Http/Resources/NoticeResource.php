@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TrainingAPIResource extends JsonResource
+class NoticeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,20 +16,14 @@ class TrainingAPIResource extends JsonResource
     public function toArray($request)
     {
         return [
-            
-            'id' => $this->id,
             'name' => $this->name,
-            'all_state' => $this->all_state,
-            'cover_image' => ($this->cover_image ) ? URL::to('/').'/uploads/'.$this->cover_image : $this->cover_image,
-            'user_id' => $this->user_id,
-            'training_start_at' => $this->training_start_at,
-            'training_end_at' => $this->training_end_at,
-            'video_type' => $this->video_type,
-            'video_link' => $this->video_link,
-            'live_link' => $this->live_link,
+            'description' => $this->description,
+            'media' => ($this->media ) ? URL::to('/').'/uploads/'.$this->media : $this->media,
             'state_id' => $this->state_id,
             'district_id' => $this->district_id,
             'municipality_id' => $this->municipality_id,
+            'created_by' => $this->created_by,
+            'updated_by' => $this->updated_by,
             'status' => $this->status
         ];
     }

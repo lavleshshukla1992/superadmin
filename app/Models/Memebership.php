@@ -14,6 +14,7 @@ class Memebership extends Model
 
     public $fillable = [
         'user_id',
+        'user_name',
         'membership_id',
         'validity_from',
         'validity_to',

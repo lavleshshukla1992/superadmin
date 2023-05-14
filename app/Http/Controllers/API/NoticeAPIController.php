@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
-use Carbon\Carbon;
-use App\Models\Scheme;
+use App\Models\Notice;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\SchemeResource;
-use App\Http\Resources\SchemeCollection;
+use App\Http\Resources\NoticeResource;
+use App\Http\Resources\NoticeCollection;
 
-class SchemeAPIController extends Controller
+class NoticeAPIController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,8 +17,7 @@ class SchemeAPIController extends Controller
      */
     public function index()
     {
-        $scheme = Scheme::where('end_at','<',date('Y-m-d h:i:s'))->paginate();
-        return response()->json(['status_code' => 200,'success' => true,"message" => "Scheme List Loaded successfully", 'data'=>new SchemeCollection($scheme)]);
+        return response()->json(['status_code' => 200,'success' => true,"message" => "Scheme List Loaded successfully", 'data'=>new NoticeCollection(Notice::all())]);
     }
 
     /**
@@ -31,6 +29,7 @@ class SchemeAPIController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+
         if ($request->hasFile('media')) 
         {
             $media = $request->file('media');
@@ -39,9 +38,9 @@ class SchemeAPIController extends Controller
             $input['media'] = $mediaName;
         }
 
-        $scheme = Scheme::create($input);
+        $notice = Notice::create($input);
 
-        return response()->json(['success' => true,'scheme_id' => $scheme->id, 'message' => 'Scheme added successfully']);
+        return response()->json(['success' => true,'notice_id' => $notice->id, 'message' => 'Notice added successfully']);
     }
 
     /**
@@ -50,9 +49,9 @@ class SchemeAPIController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Scheme $scheme)
+    public function show(Notice $notice)
     {
-        return response()->json(['status_code' => 200,'success' => true,"message" => "Scheme Detail Loaded successfully", 'data'=>new SchemeResource($scheme)]);
+        return response()->json(['status_code' => 200,'success' => true,"message" => "Notice Detail Loaded successfully", 'data'=>new NoticeResource($notice)]);
     }
 
     /**
@@ -62,9 +61,10 @@ class SchemeAPIController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Scheme $scheme)
+    public function update(Request $request, Notice $notice)
     {
         $input = $request->all();
+
         if ($request->hasFile('media')) 
         {
             $media = $request->file('media');
@@ -73,10 +73,10 @@ class SchemeAPIController extends Controller
             $input['media'] = $mediaName;
         }
 
-        $scheme->fill($input);
-        $scheme->save();
+        $notice->fill($input);
+        $notice->save();
 
-        return response()->json(['success' => true,'scheme_id' => $scheme->id, 'message' => 'Scheme updated successfully']);
+        return response()->json(['success' => true,'notice_id' => $notice->id, 'message' => 'Notice updated successfully']);
     }
 
     /**
@@ -85,15 +85,9 @@ class SchemeAPIController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Scheme $scheme)
+    public function destroy(Notice $notice)
     {
-        $scheme->delete();
-        return response()->json(['success' => true, 'message' => 'Scheme deleted successfully']);
-    }
-
-    public function liveScheme()
-    {
-        $scheme = Scheme::where('end_at','>',date('Y-m-d h:i:s'))->paginate();
-        return response()->json(['status_code' => 200,'success' => true,"message" => "Live Scheme List Loaded successfully", 'data'=>new SchemeCollection($scheme)]);
+        $notice->delete();
+        return response()->json(['success' => true, 'message' => 'Notice deleted successfully']);
     }
 }

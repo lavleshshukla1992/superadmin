@@ -16,6 +16,7 @@ class MembershipResource extends JsonResource
     {
         return [
             'user_id' => $this->user_id,
+            'user_name' => $this->user_name,
             'membership_id' => $this->membership_id,
             'validity_from' => $this->validity_from,
             'validity_to' => $this->validity_to,

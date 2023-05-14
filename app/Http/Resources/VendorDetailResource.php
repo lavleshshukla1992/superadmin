@@ -31,6 +31,7 @@ class VendorDetailResource extends JsonResource
             'current_district' => $this->current_district,
             'current_pincode' => $this->current_pincode,
             'mobile_no' => $this->mobile_no,
+            'education qualification' => $this->education_qualification,
             'municipality_panchayat_birth' => $this->municipality_panchayat_birth,
             'municipality_panchayat_current' => $this->municipality_panchayat_current,
             'police_station' => $this->police_station,

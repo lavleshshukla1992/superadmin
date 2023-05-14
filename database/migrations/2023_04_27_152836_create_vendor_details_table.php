@@ -33,6 +33,8 @@ return new class extends Migration
 
             $table->string('municipality_panchayat_birth')->nullable();
             $table->string('municipality_panchayat_current')->nullable();
+            $table->string('education_qualification')->nullable();
+
 
             $table->string('police_station')->nullable();
 

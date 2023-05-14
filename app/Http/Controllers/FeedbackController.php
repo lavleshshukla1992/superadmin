@@ -15,7 +15,7 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        $feedbacks = Feedback::select(['id','name','membership_id','subject','media','message'])->get();
+        $feedbacks = Feedback::select(['id','name','membership_id','subject','media','message','type'])->get();
         $feedbacks = !is_null($feedbacks) ? json_decode(json_encode($feedbacks),true) : [];
         return view('backend.pages.feedback.index',compact('feedbacks'));
     }

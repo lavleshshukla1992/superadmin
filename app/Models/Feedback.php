@@ -17,6 +17,7 @@ class Feedback extends Model
         'media',
         'message',
         'type',
-        'mobile_number'
+        'mobile_number',
+        'status'
     ];
 }

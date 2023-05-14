@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('subject')->nullable();
             $table->text('media')->nullable();
+            $table->string('status')->nullable();
             $table->text('message')->nullable();
             $table->bigInteger('membership_id')->nullable();
             $table->bigInteger('created_by')->nullable();

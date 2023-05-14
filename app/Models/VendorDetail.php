@@ -59,6 +59,7 @@ class VendorDetail extends Model
         'lor_image',
         'password',
         'status',
+        'education_qualification'
     ];
 
     protected function covImage(): Attribute
