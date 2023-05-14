@@ -6,7 +6,7 @@
     <div class="sidebar-header">
         <div class="logo">
             <a href="{{ route('admin.dashboard') }}">
-                <h2 class="text-white">BKM</h2> 
+                <h2 class="text-white">NASVI</h2> 
             </a>
         </div>
     </div>
