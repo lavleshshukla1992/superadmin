@@ -36,7 +36,7 @@ use App\Http\Controllers\API\FeedbackConversationAPIController;
 Route::get('ads-list',[AdAPIController::class,'getActiveAds']);
 
 // Feedback
-Route::post('feedback-store',[FeedbackAPIController::class,'store']);
+Route::post('add-feedback',[FeedbackAPIController::class,'store']);
 Route::get('feedback-detail/{feedback}',[FeedbackAPIController::class,'show']);
 // Feedback Conversation
 Route::post('feedback-conversation-store',[FeedbackConversationAPIController::class,'store']);
@@ -80,7 +80,7 @@ Route::post('login',[LoginAPIController::class,'login']);
 Route::post('password-update',[LoginAPIController::class,'passwordUpdate']);
 
 Route::get('membership-detail/{memebership}',[MemebershipController::class,'show']);
-Route::post('membership-store',[MemebershipController::class,'store']);
+Route::post('apply-membership',[MemebershipController::class,'store']);
 
 Route::get('countries',[CountryApiCoFntroller::class,'index']);
 
