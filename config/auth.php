@@ -42,7 +42,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'token',
+            'driver' => 'sanctum',
             'provider' => 'users',
             'hash' => false,
         ],
@@ -85,6 +85,10 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
+        ],
+        'vendor_detail' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\VendorDetail::class,
         ],
     ],
 

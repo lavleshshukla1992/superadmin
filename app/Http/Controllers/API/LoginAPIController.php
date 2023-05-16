@@ -6,6 +6,7 @@ use App\Models\VendorDetail;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Http\Resources\VendorDetailResource;
+use Illuminate\Support\Facades\Auth;
 
 class LoginAPIController extends Controller
 {
@@ -19,7 +20,13 @@ class LoginAPIController extends Controller
         {
             if ($vendorDetail->password == $password) 
             {
-                return  response()->json(['status_code' => 200,'success' => true,"message" => "Logged In  successfully",'data'=> new VendorDetailResource($vendorDetail)]);
+                return  response()->json([
+                    'status_code' => 200,
+                    'success' => true,
+                    "message" => "Logged In  successfully",
+                    'data'=> new VendorDetailResource($vendorDetail),
+                    'token' => $vendorDetail->createToken("Login")->plainTextToken
+                ]);
             }
             return  response()->json(['status_code' => 200,'success' => true,"message" => "Please provide valid password"]);
         }

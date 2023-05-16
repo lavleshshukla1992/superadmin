@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\VendorDetail;
+use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 

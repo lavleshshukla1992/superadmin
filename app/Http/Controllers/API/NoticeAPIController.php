@@ -17,7 +17,8 @@ class NoticeAPIController extends Controller
      */
     public function index()
     {
-        return response()->json(['status_code' => 200,'success' => true,"message" => "Scheme List Loaded successfully", 'data'=>new NoticeCollection(Notice::all())]);
+        $notices = Notice::whereDate('end_date','<',date('Y-m-d'))->get();
+        return response()->json(['status_code' => 200,'success' => true,"message" => "Notice History List Loaded successfully", 'data'=>new NoticeCollection($notices)]);
     }
 
     /**
@@ -89,5 +90,11 @@ class NoticeAPIController extends Controller
     {
         $notice->delete();
         return response()->json(['success' => true, 'message' => 'Notice deleted successfully']);
+    }
+
+    public function liveNotice()
+    {
+        $notices = Notice::whereDate('end_date','>',date('Y-m-d'))->get();
+        return response()->json(['status_code' => 200,'success' => true,"message" => "Notice Live List Loaded successfully", 'data'=>new NoticeCollection($notices)]);
     }
 }

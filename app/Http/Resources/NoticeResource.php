@@ -18,6 +18,7 @@ class NoticeResource extends JsonResource
         return [
             'name' => $this->name,
             'description' => $this->description,
+            'end_date' => $this->end_date,
             'media' => ($this->media ) ? URL::to('/').'/uploads/'.$this->media : $this->media,
             'state_id' => $this->state_id,
             'district_id' => $this->district_id,

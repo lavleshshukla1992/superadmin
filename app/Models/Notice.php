@@ -19,6 +19,7 @@ class Notice extends Model
         'municipality_id',
         'created_by',
         'updated_by',
+        'end_date',
         'status'
     ];
 }
