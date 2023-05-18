@@ -73,7 +73,10 @@ class VendorDetail extends Model
     protected function profileImageName(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  URL::to('/').'/uploads/'.$value,
+            get: fn ($value) =>  [
+                'url' => URL::to('/').'/uploads/'.$value,
+                'name' => $value
+            ]
         );
     }
     protected function identityImageName(): Attribute

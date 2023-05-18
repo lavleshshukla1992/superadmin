@@ -8,10 +8,12 @@ use App\Http\Controllers\API\AdAPIController;
 use App\Http\Controllers\PanchayatController;
 use App\Http\Controllers\VendorApiController;
 use App\Http\Controllers\MemebershipController;
+use App\Http\Controllers\API\AdminAPIController;
 use App\Http\Controllers\API\LoginAPIController;
 use App\Http\Controllers\API\StateApiController;
 use App\Http\Controllers\API\NoticeAPIController;
 use App\Http\Controllers\API\SchemeAPIController;
+use App\Http\Controllers\API\VendinAPIController;
 use App\Http\Controllers\API\CountryApiController;
 use App\Http\Controllers\API\PincodeAPIController;
 use App\Http\Controllers\API\DistrictApiController;
@@ -19,6 +21,7 @@ use App\Http\Controllers\API\FeedbackAPIController;
 use App\Http\Controllers\API\SettingsAPIController;
 use App\Http\Controllers\API\TrainingAPIController;
 use App\Http\Controllers\API\VendorDetailController;
+use App\Http\Controllers\API\MarketPlaceAPIController;
 use App\Http\Controllers\API\NotificationAPIController;
 use App\Http\Controllers\API\FeedbackConversationAPIController;
 
@@ -73,7 +76,7 @@ Route::get('state-list',[StateApiController::class,'index']);
 
 
 
-Route::middleware('auth:sanctum')->group(function(){
+// Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('feedback-detail/{feedback}',[FeedbackAPIController::class,'show']);
 
@@ -119,4 +122,18 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('save-settings',[SettingsAPIController::class, 'store']);
     Route::post('update-settings/{settings}',[SettingsAPIController::class, 'store']);
 
-});
+    Route::get('vending-list',[VendinAPIController::class,'index']);
+    Route::get('market-pace-list',[MarketPlaceAPIController::class,'index']);
+
+    Route::get('admin-list',[AdminAPIController::class,'index']);
+    Route::post('store-admin',[AdminAPIController::class,'store']);
+    Route::get('admin-detail/{admin}',[AdminAPIController::class,'show']);
+    Route::get('delete-admin/{admin}',[AdminAPIController::class,'destroy']);
+    Route::post('update-admin/{admin}',[AdminAPIController::class,'update']);
+
+
+
+
+
+
+// });

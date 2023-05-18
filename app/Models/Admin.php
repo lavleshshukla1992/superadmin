@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Admin extends Authenticatable
 {
@@ -25,7 +27,13 @@ class Admin extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name',
+        'last_name',
+        'mobile_no',
+        'email',
+        'profile_image',
+        'identity_image',
+        'password',
     ];
 
     /**
@@ -74,5 +82,15 @@ class Admin extends Authenticatable
             }
         }
         return $hasPermission;
+    }
+
+    protected function profileImage(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) =>  [
+                'url' => URL::to('/').'/uploads/'.$value,
+                'name' => $value
+            ]
+        );
     }
 }
