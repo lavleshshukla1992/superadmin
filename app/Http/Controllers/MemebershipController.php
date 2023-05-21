@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Pincode;
 use App\Models\Memebership;
+use App\Models\VendorDetail;
 use Illuminate\Http\Request;
 use App\Http\Resources\MembershipResource;
+use App\Http\Resources\VendorDetailCollection;
 
 class MemebershipController extends Controller
 {
@@ -91,5 +93,32 @@ class MemebershipController extends Controller
     public function destroy(Memebership $memebership)
     {
         //
+    }
+
+    public function search(Request $request)
+    {
+        $input = $request->all();
+        if (is_array($input) && count($input) > 0) 
+        {
+            $vendor = new VendorDetail();
+
+            foreach ($input as $key => $value) 
+            {
+               if(!is_null($value) && strlen($value)  > 0)
+               {
+                    if($key == 'name')
+                    {
+                        $key = 'vendor_first_name';
+                    }
+
+                
+                    $vendor = $vendor->where($key,$value);
+               }
+            }
+
+            $vendor = $vendor->get();
+            return response()->json(['success' => true,'status_code' =>200 , 'message' => 'Membership search List loaded Successfully','data'=> new VendorDetailCollection($vendor)]) ;
+
+        }
     }
 }

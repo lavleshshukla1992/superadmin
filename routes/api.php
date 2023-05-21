@@ -63,7 +63,9 @@ Route::post('verify-otp',[OTPController::class,'verifyOTP']);
 // Pin code 
 Route::post('pincode-list',[PincodeAPIController::class,'getPinCodeList']);
 
-Route::post('login',[LoginAPIController::class,'login']);
+Route::post('login',[LoginAPIController::class,'login']); 
+Route::post('logout',[LoginAPIController::class,'logout']);
+
 Route::post('password-update',[LoginAPIController::class,'passwordUpdate']);
 
 Route::post('apply-membership',[MemebershipController::class,'store']);
@@ -123,13 +125,15 @@ Route::get('state-list',[StateApiController::class,'index']);
     Route::post('update-settings/{settings}',[SettingsAPIController::class, 'store']);
 
     Route::get('vending-list',[VendinAPIController::class,'index']);
-    Route::get('market-pace-list',[MarketPlaceAPIController::class,'index']);
+    Route::get('marketplace-list',[MarketPlaceAPIController::class,'index']);
 
     Route::get('admin-list',[AdminAPIController::class,'index']);
     Route::post('store-admin',[AdminAPIController::class,'store']);
     Route::get('admin-detail/{admin}',[AdminAPIController::class,'show']);
     Route::get('delete-admin/{admin}',[AdminAPIController::class,'destroy']);
     Route::post('update-admin/{admin}',[AdminAPIController::class,'update']);
+
+    Route::post('members-search',[MemebershipController::class,'search']);
 
 
 

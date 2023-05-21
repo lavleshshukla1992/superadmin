@@ -49,4 +49,22 @@ class LoginAPIController extends Controller
 
         return  response()->json(['status_code' => 200,'success' => true,"message" => "User does not exist"]);
     }
+
+    public function logout(Request $request)
+    {
+        $mobilNumber = $request->get('mobile_number');
+        $vendorDetail = VendorDetail::where('mobile_no',$mobilNumber)->select()->first();
+
+        if ($vendorDetail instanceof VendorDetail) 
+        {
+            $vendorDetail->tokens()->delete();
+            return  response()->json([
+                'status_code' => 200,
+                'success' => true,
+                "message" => "Logged Out  successfully",
+            ]);
+        }
+        return  response()->json(['status_code' => 200,'success' => true,"message" => "User does not exist"]);
+        
+    }
 }

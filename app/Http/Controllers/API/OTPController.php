@@ -24,7 +24,7 @@ class OTPController extends Controller
             return response()->json(['success' => true,'status_code' =>200 ,'message' => 'User already exist']);
         }
 
-        if ($isValidMobileNumber) {
+        if ($isValidMobileNumber ||  $slug == 'signup') {
             OTP::create([
                 'mobile_no' => $mobilNumber,
                 'otp' =>  $otp,
@@ -59,7 +59,7 @@ class OTPController extends Controller
             return response()->json(['success' => true,'status_code' =>200 ,'message' => 'User Already Exist']);
         }
 
-        if ($isValidMobileNumber) {
+        if ($isValidMobileNumber || $slug == 'signup') {
             OTP::updateOrCreate([
                 'mobile_no' => $mobilNumber,
                 'otp_type' => $slug,
@@ -89,7 +89,7 @@ class OTPController extends Controller
         $mobilNumber = $request->get('mobile_no');
         $otp = $request->get('otp');
         $isValidMobileNumber  = OTPService::verifyMobileNumber($mobilNumber);    
-        if ($isValidMobileNumber) {
+        if (true) {
            $otp =  OTP::where([
                 'mobile_no' => $mobilNumber,
                 'otp_type' => 'signup',

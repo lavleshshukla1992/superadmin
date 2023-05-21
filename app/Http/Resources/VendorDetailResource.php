@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class VendorDetailResource extends JsonResource
@@ -23,7 +24,7 @@ class VendorDetailResource extends JsonResource
             'parent_last_name' => $this->parent_last_name,
             'date_of_birth' => $this->date_of_birth,
             'gender' => $this->gender,
-            'marital_status' => $this->marital_status == 1 ? "Yes" : "No",
+            'marital_status' => $this->marital_status == 1 ? "yes" : "no",
             'spouse_name' => $this->spouse_name,
             'social_category' => $this->social_category,
             'current_address' => $this->current_address,
@@ -31,11 +32,10 @@ class VendorDetailResource extends JsonResource
             'current_district' => $this->current_district,
             'current_pincode' => $this->current_pincode,
             'mobile_no' => $this->mobile_no,
-            'education qualification' => $this->education_qualification,
+            'education_qualification' => $this->education_qualification,
             'municipality_panchayat_birth' => $this->municipality_panchayat_birth,
             'municipality_panchayat_current' => $this->municipality_panchayat_current,
-            // 'police_station' => $this->police_station,
-            'is_current_add_and_birth_add_is_same' => $this->is_current_add_and_birth_add_is_same == 1 ? "Yes" : "No",
+            'is_current_add_and_birth_add_is_same' => $this->is_current_add_and_birth_add_is_same == 1 ? "yes" : "no",
             'birth_address' => $this->birth_address,
             'birth_state' => $this->birth_state,
             'birth_district' => $this->birth_district,
@@ -51,10 +51,15 @@ class VendorDetailResource extends JsonResource
             'cov_image' => $this->cov_image,
             'lor_image' => $this->lor_image,
             'shop_image' => $this->shop_image,
-            'password' => $this->password,
-            'status' => $this->status,
+            'status' => ($this->status == 'verified') ? 'verified' : 'unverified',
             'user_role' => $this->user_role,
-            'mobile_no_verification_status' => $this->mobile_no_verification_status,       
+            'mobile_no_verification_status' => $this->mobile_no_verification_status,   
+            'member_id' => $this->membership_id,
+            'validity_from' => $this->validity_from,
+            'validity_to' => $this->validity_to,   
+            'language' => 'en'
+            // 'password' => $this->password,
+            // 'police_station' => $this->police_station,
         ];
     }
 }

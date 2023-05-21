@@ -67,7 +67,10 @@ class VendorDetail extends Model
     protected function covImage(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  URL::to('/').'/uploads/'.$value,
+            get: fn ($value) =>  [
+                'url' => URL::to('/').'/uploads/'.$value,
+                'name' => $value
+            ]
         );
     }
     protected function profileImageName(): Attribute
@@ -82,19 +85,28 @@ class VendorDetail extends Model
     protected function identityImageName(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  URL::to('/').'/uploads/'.$value,
+            get: fn ($value) =>  [
+                'url' => URL::to('/').'/uploads/'.$value,
+                'name' => $value
+            ]
         );
     }
     protected function membershipImage(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  URL::to('/').'/uploads/'.$value,
+            get: fn ($value) =>  [
+                'url' => URL::to('/').'/uploads/'.$value,
+                'name' => $value
+            ]
         );
     }
     protected function lorImage(): Attribute
     {
         return new Attribute(
-            get: fn ($value) =>  URL::to('/').'/uploads/'.$value,
+            get: fn ($value) =>  [
+                'url' => URL::to('/').'/uploads/'.$value,
+                'name' => $value
+            ]
         );
     }
 }
