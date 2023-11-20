@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AdminAPICollection;
 use App\Http\Resources\AdminAPIResource;
+use App\Http\Requests\StoreAdminAPIRequest;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Settings;
 
 class AdminAPIController extends Controller
 {
@@ -18,8 +21,16 @@ class AdminAPIController extends Controller
      */
     public function index()
     {
-        $admins = Admin::all();
-        return response()->json(['status_code' => 200,'success' => true,"message" => "Admin  List Loaded successfully", 'data'=>new AdminAPICollection($admins)]);
+        $admins = Admin::paginate();
+        $meta = [
+            'first_page' => $admins->url(1),
+            'last_page' => $admins->url($admins->lastPage()),
+            'prev_page_url' =>$admins->previousPageUrl(),
+            'per_page' => $admins->perPage(),
+            'total_items' => $admins->total(),
+            'total_pages' => $admins->lastPage()
+        ];
+        return response()->json(['status_code' => 200,'success' => true,"message" => "Admin  List Loaded successfully",'meta'=> $meta, 'data'=>new AdminAPICollection($admins)]);
     }
 
     /**
@@ -28,7 +39,7 @@ class AdminAPIController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreAdminAPIRequest $request)
     {
         $input = $request->all();
         if ($request->hasFile('profile_image')) 
@@ -45,7 +56,21 @@ class AdminAPIController extends Controller
             $identityImage->move('uploads', $identityImageName); 
             $input['identity_image'] = $identityImageName;
         }
+        $input['password'] = Hash::make($input['password']);
+        $input['name'] = $input['first_name']??'';
+        $input['name'] .= isset($input['last_name'])?' '.$input['last_name']:'';
         $admin = Admin::create($input);
+        
+        if ($request->user_type) {
+            $admin->assignRole($request->user_type);
+        }
+
+        $role = $admin->roles->first();
+        $roleName = $role->name ?? '';
+        $setting = new Settings();
+        $setting->user_id = $admin->id;
+        $setting->user_type = $roleName;
+        $setting->save();
 
         return response()->json(['success' => true,'admin_id' => $admin->id, 'message' => 'Admin added successfully']);
     }

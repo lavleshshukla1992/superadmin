@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->string('status');
+            $table->string('gender');
+            $table->tinyInteger('select_demography');
 
             $table->text('media')->nullable();
-
             $table->dateTime('start_at')->nullable();
             $table->dateTime('end_at')->nullable();
 
@@ -28,6 +29,11 @@ return new class extends Migration
             $table->bigInteger('state_id')->nullable();
             $table->bigInteger('district_id')->nullable();
             $table->bigInteger('municipality_id')->nullable();
+
+            $table->bigInteger('social_category')->nullable();
+            $table->string('educational_qualification')->nullable();
+            $table->bigInteger('type_of_vending')->nullable();
+            $table->bigInteger('type_of_marketplace')->nullable();
 
             $table->bigInteger('created_by')->nullable();
             $table->bigInteger('updated_by')->nullable();

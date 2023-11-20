@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -65,23 +66,59 @@ class AdminsController extends Controller
 
         // Validation Data
         $request->validate([
-            'name' => 'required|max:50',
+            // 'name' => 'required|max:50',
+            'first_name' => 'required|max:100',
             'email' => 'required|max:100|email|unique:admins',
             'username' => 'required|max:100|unique:admins',
             'password' => 'required|min:6|confirmed',
         ]);
 
+        $input = $request->all();
+        if ($request->hasFile('profile_image')) {
+
+            $profileImage = $request->file('profile_image');
+            $profileImageName = time().$profileImage->getClientOriginalName();
+            $profileImage->move('uploads', $profileImageName); 
+            $input['profile_image'] = $profileImageName;
+            
+        }
+        
+        
+        if ($request->hasFile('identity_image')) {
+
+            $profileImage = $request->file('identity_image');
+            $profileImageName = time().$profileImage->getClientOriginalName();
+            $profileImage->move('uploads', $profileImageName); 
+            $input['identity_image'] = $profileImageName;
+
+        }
+        $input['password'] = Hash::make($request->password);
+
+        $input['name'] = $input['first_name'];
+
+        $input['name'] .= !empty($input['last_name'])?' '.$input['last_name']:'';
+        
+        $input['current_state'] = !empty($input['current_state'])?implode(',',$input['current_state']):'';
+        $input['current_district'] = !empty($input['current_district'])?implode(',',$input['current_district']):'';
+        $input['municipality_panchayat_current'] = !empty($input['municipality_panchayat_current'])?implode(',',$input['municipality_panchayat_current']):'';
         // Create New Admin
         $admin = new Admin();
-        $admin->name = $request->name;
-        $admin->username = $request->username;
-        $admin->email = $request->email;
-        $admin->password = Hash::make($request->password);
+        $admin->fill($input);
+        // $admin->name = $request->name;
+        // $admin->username = $request->username;
+        // $admin->email = $request->email;
+        // $admin->password = Hash::make($request->password);
         $admin->save();
 
         if ($request->roles) {
             $admin->assignRole($request->roles);
         }
+        $role = $admin->roles->first();
+        $roleName = $role->name ?? '';
+        $setting = new Settings();
+        $setting->user_id = $admin->id;
+        $setting->user_type = $roleName;
+        $setting->save();
 
         session()->flash('success', 'Admin has been created !!');
         return redirect()->route('admin.admins.index');
@@ -141,8 +178,9 @@ class AdminsController extends Controller
 
         // Validation Data
         $request->validate([
-            'name' => 'required|max:50',
+           // 'name' => 'required|max:50',
             'email' => 'required|max:100|email|unique:admins,email,' . $id,
+            //'username' => 'required|max:100|username|unique:admins,username,' . $id,
             'password' => 'nullable|min:6|confirmed',
         ]);
 
@@ -150,9 +188,14 @@ class AdminsController extends Controller
         $admin->name = $request->name;
         $admin->email = $request->email;
         $admin->username = $request->username;
+        $admin->name = $request->get('first_name','').' '.$request->get('last_name','');
         if ($request->password) {
             $admin->password = Hash::make($request->password);
         }
+        $admin->current_state = !empty($request->current_state)?implode(',',$request->current_state):'';
+        $admin->current_district = !empty($request->current_district)?implode(',',$request->current_district):'';
+        $admin->municipality_panchayat_current = !empty($request->municipality_panchayat_current)?implode(',',$request->municipality_panchayat_current):'';
+
         $admin->save();
 
         $admin->roles()->detach();
@@ -191,5 +234,36 @@ class AdminsController extends Controller
 
         session()->flash('success', 'Admin has been deleted !!');
         return back();
+    }
+
+    public function ChangePassword(Request $request)
+    {
+        // Validation Data
+        $request->validate([
+            'new_password' => 'min:6|required_with:confirm_password|same:confirm_password',
+        ]);
+
+        $current_user = $this->user;//Auth::user();
+        //print_r($current_user);die;
+        if (Hash::check($request->current_password, $current_user->password)) {
+            $current_user->update([
+                'password'=>bcrypt($request->new_password)
+            ]);
+            return back()->with('success', 'Password successfully updated.');
+        }
+        else{
+            return back()->with('error', 'Current password does not matched.');
+        }
+
+    }
+
+    public function ChangePasswordPage()
+    {
+        if (is_null($this->user) || !$this->user->can('admin.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any admin !');
+        }
+
+        $admins = Admin::all();
+        return view('backend.pages.changepassword.index', compact('admins'));
     }
 }

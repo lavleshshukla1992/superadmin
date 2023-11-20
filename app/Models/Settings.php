@@ -10,9 +10,14 @@ class Settings extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $perPage = 10;
+
     public $fillable = [
-        'language_short_name',
+        'language',
+        'user_type',
         'text_size',
         'user_id',
+        'notification',
+        'delete_account',
     ];
 }

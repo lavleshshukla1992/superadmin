@@ -10,10 +10,15 @@ class FeedbackConversation extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $perPage = 10;
+
     public $fillable = [
-        'uid',
         'membership_id',
-        'media',
-        'message',
+        'user_type',
+        'user_id',
+        'feedback_id',
+        'reply',
+        'status',
+        'media'
     ];
 }

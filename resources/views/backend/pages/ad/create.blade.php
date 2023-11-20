@@ -64,7 +64,7 @@
                                 <div class="tab-content">
                                     @for ($i = 1; $i < $total_ads; $i++)
                                         <div id="ad{{ $i }}" class="tab-pane">
-                                            <form id="" action="{{ route('admin.ad.store') }}" method="POST" enctype="multipart/form-data">
+                                            <form id="ad-form{{ $i }}" action="{{ route('admin.ad.store') }}" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="form-group">
                                                     <label for="ad_type{{ $i }}">Ads Type</label>
@@ -121,8 +121,18 @@
                                                         name="ads[{{ $i }}][ad_link]">
                                                 </div>
                                                 @csrf
-                                                <button type="sbmit" id="savebtn{{ $i }}"
-                                                    class="btn btn-primary mt-4 pr-4 pl-4 {{ !empty($ads[$i]['ad_type']) ? 'hide' : ''}} savebtn">SAVE</button>
+                                                @if($i == 1 || $i == 2)  
+                                                <div class="form-group">       
+                                                    <label>Vertical</label>
+                                                </div>     
+                                                @else
+                                                <div class="form-group">
+                                                    <label>Horizontal</label>   
+                                                </div>     
+                                                @endif
+                                                
+                                                <button type="submit" id="savebtn{{ $i }}"
+                                                    class="btn btn-primary mt-4 pr-4 pl-4 {{ !empty($ads[$i]['ad_type']) ? 'hide' : ''}} savebtn" onclick="return validateForm('{{ $i }}')">SAVE</button>
 
                                                 <a href="{{route('admin.ad.create')}}" type="button" class="btn btn-danger mt-4 pr-4 pl-4 hide" id="cancel_button{{$i}}"> CANCEL</a>
 
@@ -143,6 +153,7 @@
                                                 onclick="return showHideFields('editbtn','{{ $i }}')"
                                                 class="btn btn-primary mt-4 pr-4 pl-4 {{ empty($ads[$i]['ad_type']) ? 'hide' : ''}} editbtn">EDIT</button>
                                         </div>
+                                        
                                     @endfor
                                 </div>
 
@@ -248,6 +259,15 @@
             $('#ad' + tab_id + ' .editbtn').addClass('hide');
             $('#cancel_button' + tab_id).removeClass('hide');
 
+        }
+    }
+    function validateForm(i){
+        var fileInput = $("#ad_media" + i)[0];
+        if ($("#ad_media"+i).attr('value') != "" || fileInput.files.length != 0) {
+            $("#ad-form" + i).submit();
+        }else{
+            alert("Please select the media before save");
+            return false;
         }
     }
 </script>

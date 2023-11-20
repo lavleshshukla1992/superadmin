@@ -11,7 +11,15 @@ class MarketPlaceAPIController extends Controller
 {
     public function index()
     {
-        $marketPlace = MarketPlace::all();
-        return response()->json(['status_code' => 200,'success' => true,"message" => "Marketplace  List Loaded successfully", 'data'=>new MarketPlaceCollection($marketPlace)]);
+        $marketPlace = MarketPlace::paginate();
+        $meta = [
+            'first_page' => $marketPlace->url(1),
+            'last_page' => $marketPlace->url($marketPlace->lastPage()),
+            'prev_page_url' =>$marketPlace->previousPageUrl(),
+            'per_page' => $marketPlace->perPage(),
+            'total_items' => $marketPlace->total(),
+            'total_pages' => $marketPlace->lastPage()
+        ];
+        return response()->json(['status_code' => 200,'success' => true,"message" => "Marketplace  List Loaded successfully",'meta'=> $meta, 'data'=>new MarketPlaceCollection($marketPlace)]);
     }
 }

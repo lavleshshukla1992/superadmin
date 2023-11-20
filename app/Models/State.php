@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class State extends Model
 {
     use HasFactory,SoftDeletes;
+    protected $perPage = 10;
 
     public $fillable = [
         'country_id',
@@ -18,8 +19,13 @@ class State extends Model
         'status'
     ];
     protected $primaryKey = 'id';
+
     public function country()
     {
         return $this->belongsTo(Country::class,'country_id');
     }
+
+    protected $cast = [
+        'id' => 'integer'
+    ];
 }

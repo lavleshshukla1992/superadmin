@@ -1,0 +1,743 @@
+<?php
+
+namespace App\Services;
+
+use Carbon\Carbon;
+use App\Models\State;
+use App\Models\Vending;
+use App\Models\VendorDetail;
+use App\Models\MarketPlace;
+use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\MockObject\Stub\ReturnStub;
+use Illuminate\Support\Facades\Request;
+
+class MembershipDashBoard
+{
+    public static function getMembershipCategories($fromDate, $toDate)
+    {
+        $socialCategory = ['GEN', 'OBC', 'SC', 'ST'];
+
+        $socialCategoryWiseCount = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('social_category')
+            ->selectRaw('COUNT(id) as social_category_count');
+
+        $requestData = Request::all();
+        if (!empty($requestData['state_id'])) {
+            $state_id = explode(',', $requestData['state_id']);
+            $socialCategoryWiseCount->whereIn('current_state', $state_id);
+        }
+        if (!empty($requestData['district_id'])) {
+            $district_id = explode(',', $requestData['district_id']);
+            $socialCategoryWiseCount->whereIn('current_district', $district_id);
+        }
+        if (!empty($requestData['municipality_id'])) {
+            $municipality_id = explode(',', $requestData['municipality_id']);
+            $socialCategoryWiseCount->whereIn('municipality_panchayat_current', $municipality_id);
+        }
+
+        $socialCategoryWiseCount = $socialCategoryWiseCount
+            ->groupBy('social_category')
+            ->get();
+
+        $totalCount = $socialCategoryWiseCount->sum('social_category_count');
+        foreach ($socialCategoryWiseCount as $key => $category) {
+            $percentage = 0;
+            if ($totalCount > 0) {
+                $percentage = ($category['social_category_count'] / $totalCount) * 100;
+            }
+            $socialCategoryWiseCount[$key]['percentage'] = round($percentage, 1);
+        }
+
+        $matchedCategories = $socialCategoryWiseCount->pluck('social_category')->toArray();
+        $unmatchedCategories = array_diff($socialCategory, $matchedCategories);
+
+        foreach ($unmatchedCategories as $category) {
+            $socialCategoryWiseCount->push([
+                'social_category' => $category,
+                'social_category_count' => 0,
+                'percentage' => 0,
+            ]);
+        }
+
+        return $socialCategoryWiseCount->toArray();
+    }
+
+    public static function getMembershipCategoriesOLD($fromDate, $toDate)
+    {
+        $socialCategory = ['GEN', 'OBC', 'SC', 'ST'];
+
+        $socialCategoryWiseCount = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('social_category')
+            ->selectRaw('COUNT(id) as social_category_count')
+            ->groupBy('social_category')
+            ->get();
+
+        $socialCategoryWiseCount = json_decode(json_encode($socialCategoryWiseCount), true);
+
+        $totalCount = array_sum(array_column($socialCategoryWiseCount, 'social_category_count'));
+        foreach ($socialCategoryWiseCount as $key => $category) {
+            $percentage = 0;
+
+            if ($totalCount > 0) {
+                $percentage = ($category['social_category_count'] / $totalCount) * 100;
+            }
+            $socialCategoryWiseCount[$key]['percentage'] = round($percentage, 1);
+        }
+
+        $matchedCategories = array_column($socialCategoryWiseCount, 'social_category');
+        $unmatchedCategories = array_diff($socialCategory, $matchedCategories);
+
+        foreach ($unmatchedCategories as  $category) {
+            $socialCategoryWiseCount[] = [
+                'social_category' => $category,
+                'social_category_count' => 0,
+                'percentage' => 0,
+            ];
+        }
+
+        return $socialCategoryWiseCount;
+    }
+
+
+    public static function demographySpecific($fromDate, $toDate)
+    {
+        $demographySpecific = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('current_state as state')
+            ->selectRaw('COUNT(id) as state_count')
+            ->groupBy('current_state')
+            ->get();
+
+        $requestData = Request::all();
+        if (!empty($requestData['state_id'])) {
+            $state_id = explode(',', $requestData['state_id']);
+            $demographySpecific->whereIn('current_state', $state_id);
+        }
+        if (!empty($requestData['district_id'])) {
+            $district_id = explode(',', $requestData['district_id']);
+            $demographySpecific->whereIn('current_district', $district_id);
+        }
+        if (!empty($requestData['municipality_id'])) {
+            $municipality_id = explode(',', $requestData['municipality_id']);
+            $demographySpecific->whereIn('municipality_panchayat_current', $municipality_id);
+        }
+
+        $demographySpecific = json_decode(json_encode($demographySpecific), true);
+
+        $totalCount = array_sum(array_column($demographySpecific, 'state_count'));
+
+        $stateID = array_column($demographySpecific, 'state');
+
+        $states = State::whereIn('id', $stateID)->pluck('name', 'id')->toArray();
+
+        foreach ($demographySpecific as $key => $demography) {
+            $percentage = 0;
+            $demographySpecific[$key]['state'] = isset($states[$demography['state']]) ? $states[$demography['state']] : $demography['state'];
+            if ($totalCount > 0) {
+                $percentage = ($demography['state_count'] / $totalCount) * 100;
+            }
+            $demographySpecific[$key]['percentage'] = round($percentage, 1);
+        }
+
+        return $demographySpecific;
+    }
+
+    public static function genderSpecific($fromDate, $toDate)
+    {
+        $genderSpecific = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('gender as gender')
+            ->selectRaw('COUNT(id) as gender_count')
+            ->groupBy('gender')
+            ->get();
+
+        $genderSpecific = json_decode(json_encode($genderSpecific), true);
+
+        $totalCount = array_sum(array_column($genderSpecific, 'gender_count'));
+
+        $gender = ['male', 'female', 'other'];
+
+        $matchedCategories = array_column($genderSpecific, 'gender');
+        $unmatchedCategories = array_diff($gender, $matchedCategories);
+
+        foreach ($genderSpecific as $key => $gender) {
+            $percentage = 0;
+            if ($totalCount > 0) {
+                $percentage = ($gender['gender_count'] / $totalCount) * 100;
+            }
+            $genderSpecific[$key]['percentage'] = round($percentage, 1);
+        }
+
+        foreach ($unmatchedCategories as  $gender) {
+            $genderSpecific[] = [
+                "gender" => $gender,
+                "gender_count" => 0,
+                "percentage" => 0
+            ];
+        }
+
+        return $genderSpecific;
+    }
+
+    public static function memberJoinedDateWise($fromDate, $toDate)
+    {
+        $genderSpecific = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('gender as gender')
+            ->selectRaw('COUNT(id) as gender_count')
+            ->groupBy('gender')
+            ->get();
+
+        $genderSpecific = json_decode(json_encode($genderSpecific), true);
+
+        $totalCount = array_sum(array_column($genderSpecific, 'gender_count'));
+
+        foreach ($genderSpecific as $key => $gender) {
+            $percentage = 0;
+            if ($totalCount > 0) {
+                $percentage = ($gender['gender_count'] / $totalCount) * 100;
+            }
+            $genderSpecific[$key]['percentage'] = round($percentage, 1);
+        }
+
+        return $genderSpecific;
+    }
+
+    public static function memberDashboardDetail($fromDate, $toDate)
+    {
+        return [
+            'new_user' => VendorDetail::whereBetween('created_at', [$fromDate, $toDate])->count('id'),
+            'total_user' => VendorDetail::count('id'),
+            'left_user' => VendorDetail::onlyTrashed()->whereBetween('created_at', [$fromDate, $toDate])->count('id'),
+        ];
+    }
+
+    public static function memberAgeSpecific($fromDate, $toDate)
+    {
+
+        $currentDate = Carbon::now();
+        $ageRanges = [
+            ['min' => 18, 'max' => 25],
+            ['min' => 25, 'max' => 32],
+            ['min' => 32, 'max' => 39],
+            ['min' => 39, 'max' => null],
+        ];
+
+        $ageRangeData = ['18 to 25', '25 to 32', '32 to 39', '39 plus'];
+
+        $ageRangesData = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])->selectRaw('COUNT(*) as count, 
+        CASE
+            WHEN TIMESTAMPDIFF(YEAR, date_of_birth, ?) BETWEEN ? AND ? THEN "18 to 25"
+            WHEN TIMESTAMPDIFF(YEAR, date_of_birth, ?) BETWEEN ? AND ? THEN "25 to 32"
+            WHEN TIMESTAMPDIFF(YEAR, date_of_birth, ?) BETWEEN ? AND ? THEN "32 to 39"
+            ELSE "39 plus"
+        END AS age_range', [
+            $currentDate, $ageRanges[0]['min'], $ageRanges[0]['max'],
+            $currentDate, $ageRanges[1]['min'], $ageRanges[1]['max'],
+            $currentDate, $ageRanges[2]['min'], $ageRanges[2]['max']
+        ])
+            ->groupBy('age_range')->toBase()
+            ->get();
+
+        $ageRangesData = json_decode(json_encode($ageRangesData), true);
+        $totalCount =  array_sum(array_column($ageRangesData, 'count'));
+
+        foreach ($ageRangesData as $key => $age) {
+            $percentage = 0;
+            if ($totalCount > 0) {
+                $percentage = ($age['count'] / $totalCount) * 100;
+            }
+            $ageRangesData[$key]['percentage'] = round($percentage, 1);
+        }
+
+        $matchedAgeRange = array_column($ageRangesData, 'age_range');
+        $unmatchedAgeRange = array_diff($ageRangeData, $matchedAgeRange);
+
+
+        foreach ($unmatchedAgeRange as $key => $ageRange) {
+            $ageRangesData[] = [
+                "age_range" => $ageRange,
+                "count" => 0,
+                "percentage" => 0
+            ];
+        }
+        return  $ageRangesData;
+    }
+
+    public static function memberEducationalSepecific($fromDate, $toDate)
+    {
+        $educationalQualification = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('education_qualification as education_qualification')
+            ->selectRaw('COUNT(id) as count')
+            ->groupBy('education_qualification')->toBase()
+            ->get();
+
+        $educationalQualification = json_decode(json_encode($educationalQualification), true);
+
+        $totalCount = array_sum(array_column($educationalQualification, 'count'));
+
+        foreach ($educationalQualification as $key => $qualification) {
+            $percentage = 0;
+            if ($totalCount > 0) {
+                $percentage = ($qualification['count'] / $totalCount) * 100;
+            }
+            $educationalQualification[$key]['percentage'] = round($percentage, 1);
+        }
+
+        return $educationalQualification;
+    }
+
+    public static function vendingTypeSpecific($fromDate, $toDate)
+    {
+        $vendingTypeSpecific = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('type_of_vending as type_of_vending')
+            ->selectRaw('COUNT(id) as count')
+            ->groupBy('type_of_vending')->toBase()
+            ->get();
+
+
+        $vendingTypeSpecific = json_decode(json_encode($vendingTypeSpecific), true);
+
+        $vendingTypeID = array_column($vendingTypeSpecific, 'type_of_vending');
+
+        $vendingTypes = Vending::whereIn('id', $vendingTypeID)->pluck('name', 'id')->toArray();
+
+        $totalCount = array_sum(array_column($vendingTypeSpecific, 'count'));
+
+        foreach ($vendingTypeSpecific as $key => $qualification) {
+            $vendingTypeSpecific[$key]['type_of_vending'] = isset($vendingTypes[$qualification['type_of_vending']]) ? $vendingTypes[$qualification['type_of_vending']] : $qualification['type_of_vending'];
+            $percentage = 0;
+            if ($totalCount > 0) {
+                $percentage = ($qualification['count'] / $totalCount) * 100;
+            }
+            $vendingTypeSpecific[$key]['percentage'] = round($percentage, 1);
+        }
+
+        return $vendingTypeSpecific;
+    }
+
+    public static function marketplaceTypeSpecific($fromDate, $toDate)
+    {
+        $marketPlaceTypeSpecific = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('type_of_marketplace as type_of_marketplace')
+            ->selectRaw('COUNT(id) as count')
+            ->groupBy('type_of_marketplace')->toBase()
+            ->get();
+
+
+        $marketPlaceTypeSpecific = json_decode(json_encode($marketPlaceTypeSpecific), true);
+
+        $marketplaceId = array_column($marketPlaceTypeSpecific, 'type_of_marketplace');
+
+        $marketPlaces = MarketPlace::whereIn('id', $marketplaceId)->pluck('name', 'id')->toArray();
+
+        $totalCount = array_sum(array_column($marketPlaceTypeSpecific, 'count'));
+
+        foreach ($marketPlaceTypeSpecific as $key => $qualification) {
+            $marketPlaceTypeSpecific[$key]['type_of_marketplace'] = isset($marketPlaces[$qualification['type_of_marketplace']]) ? $marketPlaces[$qualification['type_of_marketplace']] : $qualification['type_of_marketplace'];
+            $percentage = 0;
+            if ($totalCount > 0) {
+                $percentage = ($qualification['count'] / $totalCount) * 100;
+            }
+            $marketPlaceTypeSpecific[$key]['percentage'] = round($percentage, 1);
+        }
+
+        return $marketPlaceTypeSpecific;
+    }
+
+    public static function maritalStatusSpecific($fromDate, $toDate)
+    {
+        $maritalStatusWise = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('marital_status as marital_status')
+            ->selectRaw('COUNT(id) as count')
+            ->groupBy('marital_status')->toBase()
+            ->get();
+
+
+        $maritalStatusWise = json_decode(json_encode($maritalStatusWise), true);
+
+        $totalCount = array_sum(array_column($maritalStatusWise, 'count'));
+
+        foreach ($maritalStatusWise as $key => $martialStatus) {
+            $percentage = 0;
+            if ($totalCount > 0) {
+                $percentage = ($martialStatus['count'] / $totalCount) * 100;
+            }
+            $maritalStatusWise[$key]['percentage'] = round($percentage, 1);
+        }
+
+        return $maritalStatusWise;
+    }
+
+    public static function dateWiseData($fromDate, $toDate)
+    {
+        $start = Carbon::parse($fromDate);
+        $end = Carbon::parse($toDate);
+
+        $result = [];
+
+        while ($start->lte($end)) {
+            $result[] = [
+                'date' => $start->toDateString(),
+                'new_user' => 0,
+                'left_user' => 0
+            ];
+            $start->addDay();
+        }
+        $dateWiseJoinedUserData = VendorDetail::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
+            ->rightJoin(DB::raw("(SELECT DATE('$fromDate' + INTERVAL a + b DAY) as date
+                        FROM
+                        (SELECT 0 a UNION SELECT 1 a UNION SELECT 2 a UNION SELECT 3 a UNION SELECT 4 a UNION SELECT 5 a UNION SELECT 6 a UNION SELECT 7 a UNION SELECT 8 a UNION SELECT 9 a) as m
+                        JOIN
+                        (SELECT 0 b UNION SELECT 10 b UNION SELECT 20 b UNION SELECT 30 b) as t
+                        WHERE DATE('$fromDate' + INTERVAL a + b DAY) <= '$toDate') as dates"), 'dates.date', '=', DB::raw('DATE(created_at)'))
+
+            ->groupBy('created_at')
+            ->orderBy('created_at')->toBase()
+            ->get();
+
+        $dateWiseLeftUserData = VendorDetail::onlyTrashed()->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
+            ->rightJoin(DB::raw("(SELECT DATE('$fromDate' + INTERVAL a + b DAY) as date
+                        FROM
+                        (SELECT 0 a UNION SELECT 1 a UNION SELECT 2 a UNION SELECT 3 a UNION SELECT 4 a UNION SELECT 5 a UNION SELECT 6 a UNION SELECT 7 a UNION SELECT 8 a UNION SELECT 9 a) as m
+                        JOIN
+                        (SELECT 0 b UNION SELECT 10 b UNION SELECT 20 b UNION SELECT 30 b) as t
+                        WHERE DATE('$fromDate' + INTERVAL a + b DAY) <= '$toDate') as dates"), 'dates.date', '=', DB::raw('DATE(created_at)'))
+
+            ->groupBy('created_at')
+            ->orderBy('created_at')->toBase()
+            ->get();
+
+        foreach ($result as $key => $value) {
+            foreach ($dateWiseJoinedUserData as  $joinedData) {
+                if ($value['date'] == $joinedData->date) {
+                    $result[$key]['new_user'] = $joinedData->count;
+                }
+            }
+        }
+
+        foreach ($result as $key => $value) {
+            foreach ($dateWiseLeftUserData as  $leftdData) {
+                if ($value['date'] == $leftdData->date) {
+                    $result[$key]['left_user'] = $leftdData->count;
+                }
+            }
+        }
+        return $result;
+    }
+
+    // Super admin Dashborad 
+
+
+    public static function adminDateWise($fromDate, $toDate)
+    {
+        $start = Carbon::parse($fromDate);
+        $end = Carbon::parse($toDate);
+
+        $result = [];
+
+        while ($start->lte($end)) {
+            $result[] = [
+                'date' => $start->toDateString(),
+                'new_user' => 0,
+                'left_user' => 0
+            ];
+            $start->addDay();
+        }
+
+        $dateWiseJoinedUserData = VendorDetail::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
+            ->whereBetween('created_at', [$fromDate, $toDate])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->toBase()
+            ->get();
+
+        // VendorDetail::select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
+        // ->rightJoin(DB::raw("(SELECT DATE('$fromDate' + INTERVAL a + b DAY) as date
+        //                 FROM
+        //                 (SELECT 0 a UNION SELECT 1 a UNION SELECT 2 a UNION SELECT 3 a UNION SELECT 4 a UNION SELECT 5 a UNION SELECT 6 a UNION SELECT 7 a UNION SELECT 8 a UNION SELECT 9 a) as m
+        //                 JOIN
+        //                 (SELECT 0 b UNION SELECT 10 b UNION SELECT 20 b UNION SELECT 30 b) as t
+        //                 WHERE DATE('$fromDate' + INTERVAL a + b DAY) <= '$toDate') as dates"), 'dates.date', '=', DB::raw('DATE(created_at)'))
+
+        // ->groupBy('created_at')
+        // ->orderBy('created_at')->toBase()
+        // ->get();
+
+        $dateWiseLeftUserData = VendorDetail::onlyTrashed()->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
+            ->whereBetween('created_at', [$fromDate, $toDate])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->toBase()
+            ->get();
+
+
+        // VendorDetail::onlyTrashed()->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(*) as count'))
+        // ->rightJoin(DB::raw("(SELECT DATE('$fromDate' + INTERVAL a + b DAY) as date
+        //                 FROM
+        //                 (SELECT 0 a UNION SELECT 1 a UNION SELECT 2 a UNION SELECT 3 a UNION SELECT 4 a UNION SELECT 5 a UNION SELECT 6 a UNION SELECT 7 a UNION SELECT 8 a UNION SELECT 9 a) as m
+        //                 JOIN
+        //                 (SELECT 0 b UNION SELECT 10 b UNION SELECT 20 b UNION SELECT 30 b) as t
+        //                 WHERE DATE('$fromDate' + INTERVAL a + b DAY) <= '$toDate') as dates"), 'dates.date', '=', DB::raw('DATE(created_at)'))
+
+        // ->groupBy(DB::raw('DATE(created_at)'))
+        // ->orderBy('created_at','asc')->toBase()
+        // ->get();
+
+        $dateWiseJoinedUserData = json_decode(json_encode($dateWiseJoinedUserData), true);
+
+        $dateWiseLeftUserData = json_decode(json_encode($dateWiseLeftUserData), true);
+        // dd($dateWiseJoinedUserData, $dateWiseLeftUserData, $result);
+
+        $loopVariable = count($dateWiseJoinedUserData) > count($dateWiseLeftUserData)  ||  count($dateWiseJoinedUserData) == count($dateWiseLeftUserData) ? $dateWiseJoinedUserData : $dateWiseLeftUserData;
+
+        $secondVariable = count($dateWiseJoinedUserData) > count($dateWiseLeftUserData)  ||  count($dateWiseJoinedUserData) == count($dateWiseLeftUserData) ? $dateWiseLeftUserData : $dateWiseJoinedUserData;
+
+        $availableDates = array_column($loopVariable, 'date');
+        $secondAvailableDates = array_column($secondVariable, 'date');
+
+        $diffDates = array_diff($availableDates, $secondAvailableDates);
+
+
+        $joinedValues = [];
+        $leftvalues = [];
+        $lables = [];
+        // $se
+        foreach ($loopVariable as $key => $mainValue) {
+            if (!is_null($mainValue['date'])) {
+                $lables[] = $mainValue['date'];
+                $joinedValues[] = $mainValue['count'];
+
+                if (in_array($mainValue['date'], $diffDates)) {
+                    $leftvalues[] = 0;
+                } else {
+                    foreach ($secondVariable as $key => $value) {
+                        if (in_array($value['date'], $availableDates) && $value['date'] == $mainValue['date']) {
+                            $leftvalues[] = $value['count'];
+                        } else if (!in_array($value['date'], $availableDates)) {
+                            $leftvalues[] = 0;
+                        }
+                    }
+                }
+            }
+        }
+        // dd([
+        //     'label' => json_encode($lables),
+        //     'joined' => json_encode($joinedValues),
+        //     'left' => json_encode($leftvalues)
+        // ]);
+        return [
+            'label' => json_encode($lables),
+            'joined' => json_encode($joinedValues),
+            'left' => json_encode($leftvalues)
+        ];
+    }
+
+    public static function adminMemberAgeSpecific($fromDate, $toDate)
+    {
+        $currentDate = Carbon::now();
+        $ageRanges = [
+            ['min' => 18, 'max' => 25],
+            ['min' => 25, 'max' => 32],
+            ['min' => 32, 'max' => 39],
+            ['min' => 39, 'max' => null],
+        ];
+
+        $ageRangeData = ['18 to 25', '25 to 32', '32 to 39', '39 plus'];
+
+        $ageRangesData = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])->selectRaw('COUNT(*) as count, 
+        CASE
+            WHEN TIMESTAMPDIFF(YEAR, date_of_birth, ?) BETWEEN ? AND ? THEN "18 to 25"
+            WHEN TIMESTAMPDIFF(YEAR, date_of_birth, ?) BETWEEN ? AND ? THEN "25 to 32"
+            WHEN TIMESTAMPDIFF(YEAR, date_of_birth, ?) BETWEEN ? AND ? THEN "32 to 39"
+            ELSE "39 plus"
+        END AS age_range', [
+            $currentDate, $ageRanges[0]['min'], $ageRanges[0]['max'],
+            $currentDate, $ageRanges[1]['min'], $ageRanges[1]['max'],
+            $currentDate, $ageRanges[2]['min'], $ageRanges[2]['max']
+        ])
+            ->groupBy('age_range')->toBase()
+            ->get();
+
+        $ageRangesData = json_decode(json_encode($ageRangesData), true);
+        $ageRangeValues = array_column($ageRangesData, 'age_range');
+
+        $values = [];
+        $data = [];
+        foreach ($ageRangeData as $key => $value) {
+            if (!in_array($value, $ageRangeValues)) {
+                $values[] = 0;
+            }
+
+
+
+            if (in_array($value, $ageRangeValues)) {
+
+                foreach ($ageRangesData as $key => $data) {
+                    if ($data['age_range'] == $value) {
+                        $values[] = $data['count'];
+                    }
+                }
+            }
+        }
+
+        return [
+            'label' => json_encode($ageRangeData),
+            'data' => json_encode($data)
+        ];
+    }
+
+    public static function  adminGenderSpecific($fromDate, $toDate)
+    {
+        $gender = ['male', 'female', 'other'];
+        $genderSpecific = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('gender as gender')
+            ->selectRaw('COUNT(id) as gender_count')
+            ->groupBy('gender')
+            ->get();
+
+        $genderSpecific = json_decode(json_encode($genderSpecific), true);
+
+        $labels = [];
+        $values = [];
+
+        foreach ($genderSpecific as $key => $value) {
+            $labels[] = $value['gender'];
+            $values[] = $value['gender_count'];
+        }
+
+        $arrayDiff = array_diff($gender, $labels);
+
+        foreach ($arrayDiff as $key => $value) {
+            $labels[] = ucfirst($value);
+            $values[] = 0;
+        }
+
+        return [
+            'label' => json_encode($labels),
+            'data' => json_encode($values)
+        ];
+    }
+
+    public static function adminDemographySpecific($fromDate, $toDate)
+    {
+        $demographySpecific = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('current_state as state')
+            ->selectRaw('COUNT(id) as state_count')
+            ->groupBy('current_state')
+            ->get();
+
+        $demographySpecific = json_decode(json_encode($demographySpecific), true);
+
+        $totalCount = array_sum(array_column($demographySpecific, 'state_count'));
+
+        $stateID = array_column($demographySpecific, 'state');
+
+        $states = State::whereIn('id', $stateID)->pluck('name', 'id')->toArray();
+        $label = [];
+        $values = [];
+        foreach ($demographySpecific as $key => $value) {
+            $label[] = isset($states[$value['state']]) ? $states[$value['state']] : '';
+            $values[] = $value['state_count'];
+        }
+
+        return [
+            'label' => json_encode($label),
+            'data' => json_encode($values)
+        ];
+    }
+
+    public static function adminMarketplaceSpecific($fromDate, $toDate)
+    {
+        $marketPlaceTypeSpecific = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('type_of_marketplace as type_of_marketplace')
+            ->selectRaw('COUNT(id) as count')
+            ->groupBy('type_of_marketplace')->toBase()
+            ->get();
+
+
+        $marketPlaceTypeSpecific = json_decode(json_encode($marketPlaceTypeSpecific), true);
+
+        $marketplaceId = array_column($marketPlaceTypeSpecific, 'type_of_marketplace');
+
+        $marketPlaces = MarketPlace::whereIn('id', $marketplaceId)->pluck('name', 'id')->toArray();
+
+
+        $label = [];
+        $data = [];
+
+        foreach ($marketPlaceTypeSpecific as $key => $value) {
+            $label[] = isset($marketPlaces[$value['type_of_marketplace']]) ? $marketPlaces[$value['type_of_marketplace']] : '';
+            $data[] = $value['count'];
+        }
+
+        return [
+            'label' => json_encode($label),
+            'data' => json_encode($data)
+        ];
+    }
+
+    public  static function adminMembershipCategories($fromDate, $toDate)
+    {
+        $socialCategoryWiseCount = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('social_category')
+            ->selectRaw('COUNT(id) as social_category_count')
+            ->groupBy('social_category')
+            ->get();
+
+        $socialCategoryWiseCount = json_decode(json_encode($socialCategoryWiseCount), true);
+
+        $label = [];
+        $values = [];
+
+        foreach ($socialCategoryWiseCount as $key => $value) {
+            $label[] = $value['social_category'];
+            $values[] = $value['social_category_count'];
+        }
+
+        $socialCategory = ['GEN', 'OBC', 'SC', 'ST'];
+
+        $diffArray = array_diff($socialCategory, $label);
+
+        foreach ($diffArray as $key => $value) {
+            $label[] = $value;
+            $values[] = 0;
+        }
+
+        return [
+            'label' => json_encode($label),
+            'data' => json_encode($values)
+        ];
+    }
+
+
+    public static function adminmemberEducationalSepecific($fromDate, $toDate)
+    {
+
+        $educational = ['High School', 'Uneducated', 'Graduate', 'Post Graduate'];
+        $educationalQualification = VendorDetail::whereBetween('created_at', [$fromDate, $toDate])
+            ->select('education_qualification as education_qualification')
+            ->selectRaw('COUNT(id) as count')
+            ->groupBy('education_qualification')->toBase()
+            ->get();
+
+        $educationalQualification = json_decode(json_encode($educationalQualification), true);
+
+        $label = [];
+        $values = [];
+
+        foreach ($educationalQualification as $key => $value) {
+            $label[] = $value['education_qualification'];
+            $values[] = $value['count'];
+        }
+
+        $arrayDiff = array_diff($educational, $label);
+
+        foreach ($arrayDiff as $key => $value) {
+            $label[] = $value;
+            $values[] = 0;
+        }
+
+        return [
+            'label' => json_encode($label),
+            'data' => json_encode($values)
+        ];
+    }
+}

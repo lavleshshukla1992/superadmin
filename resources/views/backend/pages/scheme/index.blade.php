@@ -52,6 +52,7 @@
                                         <th width="3%">Updated By</th>
                                         <th width="2%">Start Date</th>
                                         <th width="2%">End Date</th>
+                                        <th width="5%">Apply Link</th>
                                         <th width="5%">Status</th>
                                         <th width="5%">Action</th>
                                     </tr>
@@ -65,6 +66,7 @@
                                             <td>{{ $scheme['updated_by'] }}</td>
                                             <td>{{ $scheme['start_at'] }}</td>
                                             <td>{{ $scheme['end_at'] }}</td>
+                                            <td>{{ $scheme['apply_link'] }}</td>
                                             <td>{{ $scheme['status'] }}</td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
@@ -82,7 +84,7 @@
                                                         <form method="post" action="{{route('scheme.destroy',$scheme['id'])}}">
                                                             @method('delete')
                                                             @csrf
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                            <button type="submit" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-outline-danger btn-sm">
                                                                 Delete <i class="fa-solid fa-trash"></i>
                                                             </button>
                                                         </form>

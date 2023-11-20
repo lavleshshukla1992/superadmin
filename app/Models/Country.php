@@ -11,6 +11,8 @@ class Country extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $perPage = 10;
+
     public $fillable = [
         'sortname',
         'name',

@@ -16,6 +16,7 @@ class OTP extends Model
         'otp',
         'verify_status',
         'otp_type',
+        'user_type',
         'verified_at',
         'expired_at',
     ];

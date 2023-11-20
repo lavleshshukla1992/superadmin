@@ -16,12 +16,28 @@
         a.btn.btn-danger.text-white.deletebtn {
             margin-top: 15px;
         }
+        .checkbox-columns {
+    height: 100px;
+    overflow: auto;
+}
+.checkbox-column label {
+    font-weight:500;
+}
     </style>
 @endsection
 
 @php
     $state = App\Models\State::pluck('name','id')->toArray();
-    $state = ['' => 'Select State']+$state;
+    $state = ['0' => 'All State']+$state;
+    $allState = '';
+
+    $vending = App\Models\Vending::pluck('name','id')->toArray();
+    $vending = ['0' => 'All Vending']+$vending;
+
+    $marketplace = App\Models\MarketPlace::pluck('name','id')->toArray();
+    $marketplace = ['0' => 'All MarketPlace']+$marketplace;
+   // echo"<pre>";print_r($training);die;
+    //$social_category = explode(",", $training->social_category);
 @endphp
 @section('admin-content')
     <!-- page title area start -->
@@ -50,7 +66,7 @@
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
-                        {!! Form::model($training,['route'=>['training.update',$training],'method'=>'post']) !!}
+                        {!! Form::model($training,['route'=>['training.update',$training],'method'=>'PATCH', 'enctype' => 'multipart/form-data']) !!}
                             <div class="row">
                                 <div class="col-md-6">
                                     <h4 class="header-title">Manage Training</h4>
@@ -73,38 +89,139 @@
                                     </div>
                                     {{-- all_state --}}
                                     <div class="col-md-6">
-                                        @php
-                                            $allState = $training->all_state ? true :false;
-                                        @endphp
-                                        {!! Form::label('all_state', 'All State') !!}
-                                        {!! Form::checkbox('all_state', null ,$allState) !!}
-                                        {!! Form::hidden('all_state', 0 , ['class'=>'form-control']) !!}
+                                        {!! Form::label('cover_image', 'Cover Image') !!}
+                                        {!! Form::file('cover_image',['class'=>'form-control']) !!}
 
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {!! Form::label('state_id', 'State Name') !!}
-                                        {!! Form::select('state_id',$state, null , ['class'=>'form-control']) !!}
+                                        {!! Form::label('video_type', 'Insert Video Link') !!}
+                                        {!! Form::radio('video_type', 'video' , ['class'=>'form-control']) !!}
                                     </div>
                                     
                                     <div class="col-md-6">
-                                        {!! Form::label('district_id', 'District Name') !!}
-                                        {!! Form::select('district_id',[], null , ['class'=>'form-control']) !!}
+                                        {!! Form::label('video_type', 'Go Live') !!}
+                                        {!! Form::radio('video_type', 'Live' , ['class'=>'form-control']) !!}
                                     </div>
                                     
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {!! Form::label('municipality_id', 'Panchayat Name') !!}
-                                        {!! Form::select('municipality_id',[], null , ['class'=>'form-control']) !!}
+                                        {!! Form::label('video_link', 'Video Link') !!}
+                                        {!! Form::text('video_link', null , ['class'=>'form-control']) !!}
                                     </div>
                                     <div class="col-md-6">
-                                        {!! Form::label('status', 'Status') !!}
-                                        {!! Form::select('status',['Active' => 'Active', 'In Active'=>'In Active'], null , ['class'=>'form-control ']) !!}
+                                        {!! Form::label('live_link', 'Live Link') !!}
+                                        {!! Form::text('live_link', null , ['class'=>'form-control ']) !!}
                                     </div>
                                 </div>
-                            
+                                <hr>
+                                <div class="row py-4">
+                                    <div class="col-md-6">
+                                        {!! Form::label('select_demography', 'Select Demography') !!}
+                                        <div class="checkbox-container">
+                                            <label class="checkbox-label">
+                                                {!! Form::radio('select_demography', '1', false, ['class' => 'demography-checkbox']) !!} Yes
+                                            </label>
+                                            <label class="checkbox-label">
+                                                {!! Form::radio('select_demography', '0', false, ['class' => 'demography-checkbox']) !!} No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-0">
+
+                                <div class="demography-fields">                                    
+                                    <div class="row">                                    
+                                        <div class="col-md-6">
+                                            {!! Form::label('gender', 'Gender') !!}
+                                            <div class="checkbox-columns" id="gender">
+                                                @foreach(['0' => 'All Gender','male' => 'Male', 'female'=>'Female', 'other'=>'Other'] as $key=>$result)
+                                                    <div class="checkbox-column">
+                                                        <input type="checkbox" name="gender[]" id="{{ $key }}" value="{{ $key }}" {{ (in_array($key, explode(",", $training->gender))) ? 'checked' : '' }}>
+                                                        <label for="{{ $key }}">{{ $result }}</label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            {!! Form::label('social_category', 'Social Category') !!}
+                                            <div class="checkbox-columns" id="social_category">
+                                                @foreach(['0' => 'All Social Category','Sc' => 'SC', 'ST'=>'ST', 'OBC'=>'OBC', 'General'=>'General', 'EWS'=>'EWS', 'Open'=>'Open'] as $key=>$result)
+                                                    <div class="checkbox-column">
+                                                        <input type="checkbox" name="social_category[]" id="{{ $key }}" value="{{ $key }}" {{ (in_array($key, explode(",", $training->social_category))) ? 'checked' : '' }}>
+                                                        <label for="{{ $key }}">{{ $result }}</label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">                                    
+                                        <div class="col-md-6">
+                                            {!! Form::label('educational_qualification', 'Educational Qualification') !!}
+                                            <div class="checkbox-columns" id="educational_qualification">
+                                                @foreach(['0' => 'All Educational Qualification','primary_education' => 'Primary Education', 'high_school' => 'High School', 'Intermediate' => 'Intermediate', 'Undergraduate' => 'Undergraduate', 'Postgraduate' => 'Postgraduate'] as $key=>$result)
+                                                    <div class="checkbox-column">
+                                                        <input type="checkbox" name="educational_qualification[]" id="{{ $key }}" value="{{ $key }}" {{ (in_array($key, explode(",", $training->educational_qualification))) ? 'checked' : '' }}>
+                                                        <label for="{{ $key }}">{{ $result }}</label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            {!! Form::label('type_of_vending', 'Type Of Vending') !!}
+                                            <div class="checkbox-columns" id="type_of_vending">
+                                                @foreach($vending as $key=>$result)
+                                                    <div class="checkbox-column">
+                                                        <input type="checkbox" name="type_of_vending[]" id="{{ $key }}" value="{{ $key }}" {{ (in_array($key, explode(",", $training->type_of_vending))) ? 'checked' : '' }}>
+                                                        <label for="{{ $key }}">{{ $result }}</label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {!! Form::label('type_of_marketplace', 'Type Of Marketplace') !!}
+                                            <div class="checkbox-columns" id="type_of_marketplace">
+                                                @foreach($marketplace as $key=>$result)
+                                                    <div class="checkbox-column">
+                                                        <input type="checkbox" name="type_of_marketplace[]" id="type_of_marketplace{{ $key }}" value="{{ $key }}" {{ (in_array($key, explode(",", $training->type_of_marketplace))) ? 'checked' : '' }}>
+                                                        <label for="type_of_marketplace{{ $key }}">{{ $result }}</label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>                                
+                                        <div class="col-md-6">
+                                            {!! Form::label('state', 'State Name') !!}
+                                            <div class="checkbox-columns" id="state_id">
+                                                @foreach($state as $key=>$result)
+                                                    <div class="checkbox-column">
+                                                        <input type="checkbox" name="state_id[]" id="state_id{{ $key }}" value="{{ $key }}" {{ (in_array($key, explode(",", $training->state_id))) ? 'checked' : '' }}>
+                                                        <label for="state_id{{ $key }}">{{ $result }}</label>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            {!! Form::label('district_id', 'District Name') !!}
+                                            <div class="checkbox-columns" id="district_id">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            {!! Form::label('municipality_id', 'Panchayat Name') !!}
+                                            
+                                            <div class="checkbox-columns" id="municipality_id">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         {!! Form::close() !!}
                     </div>
@@ -116,51 +233,14 @@
     </div>
 @endsection
 @section('scripts')
-
-    <script>
-        var allState = {{$allState}};
-        $(function() {
-            setPanchayat();
-            setDistrict();
-
-            console.log("on load called ..................");
-            
-        });
-        $("#state_id").on("change",function(){           
-            setPanchayat();
-            setDistrict();
-        });
-
-        function setDistrict() {
-            var stateId = $(this).val();
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: '/admin/districts-list',
-                type: 'POST',
-                data: {
-                    state:stateId
-                },
-                success: function (response) { 
-                    var options = "<option value=''> Select State</option>";
-                    for (const key in response) {
-                        if (response.hasOwnProperty.call(response, key)) {
-                            const element = response[key];
-                            options += "<option value='"+key+"'>"+element+"</option>";
-                            
-                        }
-                    }
-                    $("#district_id").empty().append(options);
-                }
-            }); 
-        }
-
-        function setPanchayat() {
-            
-            var stateId = $("#state_id").val();
+<script>
+    function setPanchayat() {
+        var selecteddistricts = $('#district_id input[type="checkbox"]:checked');
+        var selectedStates = $('#state_id input[type="checkbox"]:checked');
+        if (selecteddistricts.length > 1) {
+            $('#municipality_id').empty();
+        } else if (selecteddistricts.length === 1) {
+            var stateId = selectedStates.val();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -172,39 +252,128 @@
                 data: {
                     state:stateId
                 },
-                success: function (response) { 
-                    var options = "<option value=''> Select State</option>";
-                    for (const key in response) {
-                        if (response.hasOwnProperty.call(response, key)) {
-                            const element = response[key];
-                            options += "<option value='"+key+"'>"+element+"</option>";
-                            
+                success: function(response) {
+                    response['0'] = 'All Panchayat';
+                    $('#municipality_id').empty();
+                    var municipality = "<?= $training->municipality_id ?>";
+                    var municipalityArray = municipality.split(',');
+                    $.each(response, function(key, value) {
+                        var checkbox = '<div class="checkbox-column">';
+                        if (municipalityArray.includes(key)) {
+                            checkbox += '<input type="checkbox" name="municipality_id[]" id="municipality_id' + key + '" value="' + key + '" checked> ';
+                        }else{
+                            checkbox += '<input type="checkbox" name="municipality_id[]" id="municipality_id' + key + '" value="' + key + '"> ';
                         }
-                    }
-                    $("#municipality_id").empty().append(options);
+                        checkbox += '<label for="municipality_id' + key + '"> ' + value + '</label>';
+                        checkbox += '</div>';
+                        $('#municipality_id').append(checkbox);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
                 }
-            }); 
+            });
         }
-
-        if (allState) 
-        {
-            $("#district_id").attr("disabled",true);
-            $("#state_id").attr("disabled",true);
-            $("#municipality_id").attr("disabled",true);
-        }
-        $("#all_state").on("click",function(){
-            if ($(this).prop("checked")) 
-            {
-                $("#district_id").attr("disabled",true);
-                $("#state_id").attr("disabled",true);
-                $("#municipality_id").attr("disabled",true);
-            }
-            else{
-                $("#district_id").removeAttr("disabled",'true');
-                $("#state_id").removeAttr("disabled",'true');
-                $("#municipality_id").removeAttr("disabled",'true');
-
+    }
+</script>
+<script>
+    $(document).ready(function() {
+        $('.demography-checkbox').change(function() {
+            if ($(this).val() == '0') {
+                $('.demography-fields').hide();
+            } else {
+                $('.demography-fields').show();
             }
         });
-    </script>
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        function toggleAllchecked(checkbox,field) {
+            $(field).prop('checked', checkbox.checked);
+        }
+        $(document).on('change','#type_of_vending input[type="checkbox"]',function(){
+            if($(this).val()==0){
+                toggleAllchecked(this,'#type_of_vending input[type="checkbox"]');
+            }
+        });
+        $(document).on('change','#type_of_marketplace input[type="checkbox"]',function(){
+            if($(this).val()==0 && $(this).val()!=''){
+                toggleAllchecked(this,'#type_of_marketplace input[type="checkbox"]');
+            }
+        });
+        $(document).on('change','#gender input[type="checkbox"]',function(){
+            if($(this).val()==0){
+                toggleAllchecked(this,'#gender input[type="checkbox"]');
+            }
+        });
+        $(document).on('change','#social_category input[type="checkbox"]',function(){
+            if($(this).val()==0){
+                toggleAllchecked(this,'#social_category input[type="checkbox"]');
+            }
+        });
+        $(document).on('change','#educational_qualification input[type="checkbox"]',function(){
+            if($(this).val()==0){
+                toggleAllchecked(this,'#educational_qualification input[type="checkbox"]');
+            }
+        });
+        $(document).on('change','#state_id input[type="checkbox"]',function(){
+            if($(this).val()==0 && $(this).val()!=''){
+                toggleAllchecked(this,'#state_id input[type="checkbox"]');
+            }
+            var selectedStates = $('#state_id input[type="checkbox"]:checked');
+            if (selectedStates.length > 1 || selectedStates.length < 1 ) {
+                $('#district_id').empty();
+                $('#municipality_id').empty();
+            } else if (selectedStates.length === 1) {
+                var stateId = selectedStates.val();
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '/admin/districts-list',
+                    method: 'POST',
+                    data: { state: stateId },
+                    success: function(response) {
+                        response['0'] = 'All District';
+                        $('#district_id').empty();
+                        var district = "<?= $training->district_id ?>";
+                        var districtArray = district.split(',');
+                        $.each(response, function(key, value) {
+                            var checkbox = '<div class="checkbox-column">';
+                            if (districtArray.includes(key)) {
+                                checkbox += '<input type="checkbox" name="district_id[]" id="district_id' + key + '" value="' + key + '" checked> ';
+                            }else{
+                                checkbox += '<input type="checkbox" name="district_id[]" id="district_id' + key + '" value="' + key + '"> ';
+                            }
+                            checkbox += '<label for="district_id' + key + '"> ' + value + '</label>';
+                            checkbox += '</div>';
+                            $('#district_id').append(checkbox);
+                        });
+                    setPanchayat();
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+        
+        $('#state_id input[type="checkbox"]:checked').trigger("change");
+
+        $(document).on('change','#district_id input[type="checkbox"]',function(){
+            if($(this).val()==0){
+                toggleAllchecked(this,'#district_id input[type="checkbox"]');
+            }
+            setPanchayat();
+        });
+        $(document).on('change','#municipality_id input[type="checkbox"]',function(){
+            if($(this).val()==0){
+                toggleAllchecked(this,'#municipality_id input[type="checkbox"]');
+            }
+        });
+    });
+</script>
 @endsection

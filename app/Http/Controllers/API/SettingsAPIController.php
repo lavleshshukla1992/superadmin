@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SettingResource;
 use App\Http\Resources\SettingCollection;
+use Carbon\Carbon;
+use App\Models\VendorDetail;
 
 class SettingsAPIController extends Controller
 {
@@ -28,8 +30,49 @@ class SettingsAPIController extends Controller
      */
     public function store(Request $request)
     {
-        $setting = Settings::create($request->all());
-        return response()->json(['success' => true,'setting_id' => $setting->id, 'message' => 'Settings created successfully']);
+        $request->validate([
+            'user_id' => 'required|integer|min:1',
+        ]);
+
+        $setting = Settings::where('user_id', $request->get('user_id'))->first();
+
+        if(empty($setting->user_id)){
+            $setting = new Settings();
+        }
+        if(!empty($request->get('user_id'))){
+            $setting->user_id = $request->get('user_id');
+        }
+        
+        if(!empty($request->get('language'))){
+            $setting->language = $request->get('language');
+        }
+        
+        if(!empty($request->get('text_size'))){
+            $setting->text_size = $request->get('text_size');
+        }
+        
+        if(!empty($request->get('notification'))){
+            $setting->notification = $request->get('notification');
+        }
+        
+        if(!empty($request->get('delete_account'))){
+            $setting->delete_account = $request->get('delete_account');
+        }
+
+        $setting->user_type = $request->get('user_type')??'member';
+        
+        if(!empty($setting->delete_account) && $setting->delete_account=='Yes' && $setting->user_type=='member'){
+            $setting->deleted_at = Carbon::now();
+            $vendor = VendorDetail::where('id', $request->get('user_id'))->first();
+            if(!empty($vendor->id)){
+                $vendor->deleted_at = Carbon::now();
+                $vendor->save();
+            }
+        }
+
+        $setting->save();
+
+        return response()->json(['success' => true,'setting_id' => $setting->id, 'message' => 'Settings created successfully!']);
     }
 
     /**

@@ -15,8 +15,19 @@ class TrainingController extends Controller
      */
     public function index()
     {
-        $trainings = Training::select(['id','name','training_start_at','training_end_at','user_id'])
+        // $trainings = Training::select(['id','name','training_start_at','training_end_at','user_id'])
+        // ->toBase()->get();
+        $trainings = Training::select(
+            'trainings.id',
+            'trainings.name',
+            'trainings.training_start_at',
+            'trainings.training_end_at',
+            'trainings.created_at',
+            'users.name as user_id',
+        )
+        ->leftJoin('users as users', 'trainings.user_id', '=', 'users.id')
         ->toBase()->get();
+        //echo "<pre>";print_r($trainings);die;
         $trainings = !is_null($trainings) ? json_decode(json_encode($trainings),true): [];
         return view('backend.pages.training.index',compact('trainings'));
     }
@@ -48,7 +59,17 @@ class TrainingController extends Controller
             $media->move('uploads', $mediaName);
             $input['cover_image'] = $mediaName;
         }
+        $input['gender'] = !empty($input['gender'])?implode(',',$input['gender']):'';
+        $input['social_category'] = !empty($input['social_category'])?implode(',',$input['social_category']):'';
+        $input['educational_qualification'] = !empty($input['educational_qualification'])?implode(',',$input['educational_qualification']):'';
+        $input['type_of_vending'] = !empty($input['type_of_vending'])?implode(',',$input['type_of_vending']):'';
+        $input['type_of_marketplace'] = !empty($input['type_of_marketplace'])?implode(',',$input['type_of_marketplace']):'';
+        $input['state_id'] = !empty($input['state_id'])?implode(',',$input['state_id']):'';
+        $input['district_id'] = !empty($input['district_id'])?implode(',',$input['district_id']):'';
+        $input['municipality_id'] = !empty($input['municipality_id'])?implode(',',$input['municipality_id']):'';
+        $input['training_end_at'] = date('Y-m-d');
 
+       // echo"<pre>";print_r($input);die;
         Training::create($input);
         return redirect()->route('training.index');
     }
@@ -84,8 +105,21 @@ class TrainingController extends Controller
      */
     public function update(UpdateTrainingRequest $request, Training $training)
     {
-        $training->fill($request->all());
+       // $training->fill($request->all());
+        $input = $request->all();
+        $input['gender'] = !empty($input['gender'])?implode(',',$input['gender']):'';
+        $input['social_category'] = !empty($input['social_category'])?implode(',',$input['social_category']):'';
+        $input['educational_qualification'] = !empty($input['educational_qualification'])?implode(',',$input['educational_qualification']):'';
+        $input['type_of_vending'] = !empty($input['type_of_vending'])?implode(',',$input['type_of_vending']):'';
+        $input['type_of_marketplace'] = !empty($input['type_of_marketplace'])?implode(',',$input['type_of_marketplace']):'';
+        $input['state_id'] = !empty($input['state_id'])?implode(',',$input['state_id']):'';
+        $input['district_id'] = !empty($input['district_id'])?implode(',',$input['district_id']):'';
+        $input['municipality_id'] = !empty($input['municipality_id'])?implode(',',$input['municipality_id']):'';
+        
+        $training->fill($input);
         $training->save();
+        
+       // $training->save();
         return redirect()->route('training.index');
     }
 

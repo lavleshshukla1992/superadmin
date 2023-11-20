@@ -11,6 +11,8 @@ class AdsHistory extends Model
     use HasFactory,SoftDeletes;
 
     public $table = 'ads';
+    protected $perPage = 10;
+
 
     public $fillable = [
         'ad_sr_no',

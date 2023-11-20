@@ -61,6 +61,10 @@ return new class extends Migration
             $table->text('password',500)->nullable();
             $table->bigInteger('status',5)->nullable();
             $table->bigInteger('user_role')->nullable();
+
+            $table->tinyInteger('certificate_of_vending')->nullable();
+            $table->tinyInteger('letter_of_recommendation')->nullable();
+
             $table->tinyInteger('mobile_no_verification_status')->nullable();
             
             $table->softDeletes();

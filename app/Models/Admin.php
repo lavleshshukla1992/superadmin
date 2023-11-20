@@ -8,11 +8,15 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Admin extends Authenticatable
 {
-    use Notifiable, HasRoles;
+    use Notifiable, HasRoles,HasApiTokens;
+
+    protected $perPage = 10;
 
     /**
      * Set the default guard for this model.
@@ -27,6 +31,8 @@ class Admin extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'admin',
+        'name',
         'first_name',
         'last_name',
         'mobile_no',
@@ -34,6 +40,11 @@ class Admin extends Authenticatable
         'profile_image',
         'identity_image',
         'password',
+        'current_state',
+        'current_district',
+        'municipality_panchayat_current',
+        'assign_demography',
+        'username'
     ];
 
     /**
@@ -93,4 +104,16 @@ class Admin extends Authenticatable
             ]
         );
     }
+
+    protected function identityImage(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) =>  [
+                'url' => URL::to('/').'/uploads/'.$value,
+                'name' => $value
+            ]
+        );
+    }
+
+    // identity_image
 }

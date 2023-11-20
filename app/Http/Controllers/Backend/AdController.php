@@ -63,15 +63,6 @@ class AdController extends Controller
     {
         $data = array();
         $userId = Auth::check() ? Auth::id() : true;
-        // $file = $request->file('ads');
-        // $file = $file[1]['ad_media']??'';
-        // if ($file!='') {
-        //     $fileName = $file->getClientOriginalName();
-        //     $file->move('uploads', $fileName);
-        // }
-        // echo "<pre>";
-        // print_r($fileName);
-        // die;
         foreach ($request->input('ads') as $key => $val) {
             $file = $request->file('ads');
             $file = $file[$key]['ad_media']??'';
@@ -87,23 +78,23 @@ class AdController extends Controller
                 'ad_type' => $val['ad_type'] ?? '',
                 'google_script' => $val['google_script'] ?? '',
                 'ad_name' => $name ?? '',
-                'ad_media' => $fileName ?? '',
+               // 'ad_media' => $fileName ?? '',
                 'ad_link' => $val['ad_link'] ?? '',
                 'ad_status' => $val['ad_status'] ?? '1',
                 'created_at' => date('Y-m-d H:i:s'),
             );
+            if(!empty($fileName)){
+                $data['ad_media'] = $fileName;
+            }
             $ad = DB::table('ads')->where('ad_sr_no', $key)->first('id');
             if (empty($ad->id)) {
                 $id = DB::table('ads')->insertGetId($data);
                 AdsService::prepareAdHistoryData($ad->id);
-                // (new Ad)->insertIntoHistory($id, 'insert');
             } else {
                 DB::table('ads')
                     ->where('id',  $ad->id)
                     ->update($data);   
                     AdsService::prepareAdHistoryData($ad->id);
- 
-                // (new Ad)->insertIntoHistory($ad->id, 'update');
             }
         }
 

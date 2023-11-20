@@ -10,6 +10,8 @@ class MarketPlace extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $perPage = 10;
+
     public $fillable = [
         'name',
         'description',

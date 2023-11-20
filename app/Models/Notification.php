@@ -10,10 +10,15 @@ class Notification extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $perPage = 10;
+
     public $fillable = [
         'title',
         'status',
+        'user_id',
         'type',
-        'sent_at'
+        'type_id',
+        'sent_at',
+        'is_read'
     ];
 }

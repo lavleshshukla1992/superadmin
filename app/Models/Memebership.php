@@ -12,6 +12,8 @@ class Memebership extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $perPage = 10;
+
     public $fillable = [
         'user_id',
         'user_name',
@@ -19,5 +21,6 @@ class Memebership extends Model
         'validity_from',
         'validity_to',
         'status',
+        'applied_for'
     ];
 }

@@ -8,6 +8,10 @@ use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\PincodeController;
 use App\Http\Controllers\PanchayatController;
+use App\Http\Controllers\MemebershipController;
+use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\API\MembershipAPIController;
+use App\Http\Controllers\NomineeController;
 
 
 /*
@@ -30,10 +34,18 @@ Auth::routes();
 Route::get('/', 'HomeController@redirectAdmin')->name('index');
 Route::get('/home', 'HomeController@index')->name('home');
 
-/**
- * Admin routes
- */
 Route::group(['prefix' => 'admin'], function () {
+  Route::get('/login', 'Backend\Auth\LoginController@showLoginForm')->name('admin.login');
+  Route::post('/login/submit', 'Backend\Auth\LoginController@login')->name('admin.login.submit');
+
+});
+Route::group(['prefix' => 'admin', 'middleware' => 'admin.auth'], function () {
+    Route::get('member-verification',[MembershipAPIController::class,'verification'])->name('member-verification');
+    Route::get('member-detail/{id}', [MembershipAPIController::class, 'memberDetail'])->name('member-detail');
+    Route::get('member-details/{id}', [MembershipAPIController::class, 'memberDetails'])->name('member-details');
+    Route::get('member-pdf/{id}', [MembershipAPIController::class, 'memberPDF'])->name('member-pdf');
+    Route::post('verification-status', [MembershipAPIController::class, 'updateStatus'])->name('verification-status');
+
     Route::get('/', 'Backend\DashboardController@index')->name('admin.dashboard');
     Route::resource('roles', 'Backend\RolesController', ['names' => 'admin.roles']);
     Route::resource('users', 'Backend\UsersController', ['names' => 'admin.users']);
@@ -43,11 +55,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('panchayat-list',[PanchayatController::class,'panchayatListStateWise']);
 
     // panchayat-list
-    // Login Routes
-    Route::get('/login', 'Backend\Auth\LoginController@showLoginForm')->name('admin.login');
-    Route::post('/login/submit', 'Backend\Auth\LoginController@login')->name('admin.login.submit');
-
-    // Logout Routes
+  
     Route::post('/logout/submit', 'Backend\Auth\LoginController@logout')->name('admin.logout.submit');
 
     // Forget Password Routes
@@ -58,7 +66,10 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('notifications', 'NotificationController');
     Route::resource('training', 'TrainingController');
     Route::resource('scheme', 'SchemeController');
+    Route::get('feedback/fetch-updated-data', 'FeedbackController@showMessage')->name('fetch.updated.data');
     Route::resource('feedback', 'FeedbackController');
+
+    Route::match(['get', 'post'], 'feedback-status', [FeedbackController::class, 'updateStatus'])->name('feedback-status');
     Route::resource('ad', 'Backend\AdController', ['names' => 'admin.ad']);
     Route::resource('country', 'CountryController');
     Route::resource('state', 'StateController');
@@ -68,8 +79,22 @@ Route::group(['prefix' => 'admin'], function () {
     Route::resource('pin-codes', 'PincodeController')->parameter('pin-codes','pinCode');
     Route::resource('market-places', 'MarketPlaceController')->parameter('market-places','marketPlace');
     Route::resource('vending', 'VendingController');
+
+
+    Route::match(['get','post'],'membership-serach', [MemebershipController::class,'membershipSearch'])->name('membership-search');
+
+    Route::match(['get','post'],'membership-dashboard', [MemebershipController::class,'membershipDashboard'])->name('membership-dashboard');
+
     Route::resource('memberships', 'MemebershipController');
     Route::resource('notice', 'NoticeController'); 
+
+    Route::get('/change-password', 'Backend\AdminsController@ChangePasswordPage')->name('admin.ChangePasswordPage');
+    Route::post('/change-password', 'Backend\AdminsController@ChangePassword')->name('admin.ChangePassword');
+
+    Route::resource('information', 'InformationController');
+    
+    Route::get('nominee-details/{id}', [NomineeController::class, 'edit'])->name('nominee-details');
+    Route::post('nominee-details/{id}', [NomineeController::class, 'update'])->name('update-nominee-details');
 
 });
 

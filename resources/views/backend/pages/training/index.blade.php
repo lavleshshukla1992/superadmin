@@ -39,7 +39,7 @@
             <div class="col-12 mt-5">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="header-title float-left">State List</h4>
+                        <h4 class="header-title float-left">Training List</h4>
                         <div class="clearfix"></div>
                         <div class="data-tables">
                             @include('backend.layouts.partials.messages')
@@ -61,7 +61,7 @@
                                             <td>{{ $training['name'] }}</td>
                                             <td>{{ $training['training_start_at'] }}</td>
                                             <td>{{ $training['training_end_at'] }}</td>
-                                            <td>{{ $training['user_id'] }}</td>
+                                            <td>{{ $training['created_at'] }}</td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <div class="btn-group mr-2">

@@ -13,7 +13,7 @@
                     @csrf
                     <div class="login-form-head">
                         <h4>Sign In</h4>
-                        <p>Bharat Ke Mazdoor Admin Panel</p>
+                        <h5>NASVI</h5>
                     </div>
                     <div class="login-form-body">
                         @include('backend.layouts.partials.messages')

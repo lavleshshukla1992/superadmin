@@ -11,7 +11,7 @@ class VendinAPIController extends Controller
 {
     public function index()
     {
-        $vending = Vending::all();
-        return response()->json(['status_code' => 200,'success' => true,"message" => "Vending  List Loaded successfully", 'data'=>new VendingCollection($vending)]);
+        $vending = Vending::get();
+        return response()->json(['status_code' => 200,'success' => true,"message" => "Vending  List Loaded successfully",'data'=>new VendingCollection($vending)]);
     }
 }

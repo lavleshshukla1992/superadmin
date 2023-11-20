@@ -14,6 +14,9 @@ class VendorDetail extends Model
 {
     use HasFactory,SoftDeletes,HasApiTokens,Authenticatable;
 
+    protected $perPage = 10;
+
+
     public $fillable = [
         'uid',
         'vendor_first_name',
@@ -61,14 +64,59 @@ class VendorDetail extends Model
         'lor_image',
         'password',
         'status',
-        'education_qualification'
+        'language',
+        'education_qualification',
+        'marketpalce_others',
+        'vending_others',
+        'shop_image',
+        'certificate_of_vending',
+        'letter_of_recommendation'
     ];
+
+    protected $cast = [
+
+        'total_years_of_business' => 'integer',
+        'current_state' => 'integer',
+        'current_district' => 'integer',
+        'current_pincode' => 'integer',
+        'birth_address' => 'integer',
+        'birth_state' => 'integer',
+        'birth_district' => 'integer',
+        'birth_pincode' => 'integer',
+        'birth_state' => 'integer',
+        'birth_district' => 'integer',
+        'birth_pincode' => 'integer',
+        'pro_category_id' => 'integer',
+        'pro_sub_category_id' => 'integer',
+        'exp_no_of_years' => 'integer',
+    ];
+
+    public function mobileNo(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) =>  (int) $value
+        );
+    }
+
+    // public function educationQualification(): Attribute
+    // {
+    //     return new Attribute(
+    //         get: fn ($value) =>  (int) $value
+    //     );
+    // }
+
+    public function uid(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) =>  (int) $value
+        );
+    }
 
     protected function covImage(): Attribute
     {
         return new Attribute(
             get: fn ($value) =>  [
-                'url' => URL::to('/').'/uploads/'.$value,
+                'url' =>  !is_null($value) ? URL::to('/').'/uploads/'.$value : null,
                 'name' => $value
             ]
         );
@@ -77,7 +125,7 @@ class VendorDetail extends Model
     {
         return new Attribute(
             get: fn ($value) =>  [
-                'url' => URL::to('/').'/uploads/'.$value,
+                'url' =>  !is_null($value) ? URL::to('/').'/uploads/'.$value : null,
                 'name' => $value
             ]
         );
@@ -86,7 +134,7 @@ class VendorDetail extends Model
     {
         return new Attribute(
             get: fn ($value) =>  [
-                'url' => URL::to('/').'/uploads/'.$value,
+                'url' =>  !is_null($value) ? URL::to('/').'/uploads/'.$value : null,
                 'name' => $value
             ]
         );
@@ -95,7 +143,7 @@ class VendorDetail extends Model
     {
         return new Attribute(
             get: fn ($value) =>  [
-                'url' => URL::to('/').'/uploads/'.$value,
+                'url' =>  !is_null($value) ? URL::to('/').'/uploads/'.$value : null,
                 'name' => $value
             ]
         );
@@ -104,7 +152,16 @@ class VendorDetail extends Model
     {
         return new Attribute(
             get: fn ($value) =>  [
-                'url' => URL::to('/').'/uploads/'.$value,
+                'url' =>  !is_null($value) ? URL::to('/').'/uploads/'.$value : null,
+                'name' => $value
+            ]
+        );
+    }
+    protected function shopImage(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) =>  [
+                'url' =>  !is_null($value) ? URL::to('/').'/uploads/'.$value : null,
                 'name' => $value
             ]
         );

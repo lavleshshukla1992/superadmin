@@ -76,7 +76,7 @@
                                                         <form method="post" action="{{route('notice.destroy',$notice['id'])}}">
                                                             @method('delete')
                                                             @csrf
-                                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                            <button type="submit" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-outline-danger btn-sm">
                                                                 Delete <i class="fa-solid fa-trash"></i>
                                                             </button>
                                                         </form>

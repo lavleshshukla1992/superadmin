@@ -18,8 +18,8 @@ class DistrictApiController extends Controller
     public function index(Request $request)
     {
         $stateId = $request->get('state_id');
-        $districtList = District::where('state_id',$stateId)->select('id','name','state_id','status')->get();
-        return response()->json(['status_code' => 200,'success' => true,"message" => "District List Loaded successfully", 'data'=>new DistrictCollection($districtList)]);
+        $districtList = District::where('state_id',$stateId)->orderBy('name', 'ASC')->select('id','name','state_id','status')->get();
+        return response()->json(['status_code' => 200,'success' => true,"message" => "District List Loaded successfully",'data'=>new DistrictCollection($districtList)]);
 
     }
 

@@ -9,6 +9,9 @@ class Category extends Model
 {
     use HasFactory;
 
+    protected $perPage = 10;
+
+
     public $fillable = [
         'name',
         'description',

@@ -40,7 +40,14 @@ class StateController extends Controller
      */
     public function store(StoreStateRequest $request)
     {
-        State::create($request->all());
+        $input = $request->all();
+        //echo "<pre>"; print_r($request->all());die;
+        $state = State::updateOrCreate(
+            ['name' => $input['name'], 'country_id' => $input['country_id']],
+            ['name' => $input['name'], 'country_id' => $input['country_id'], 'status' => $input['status']]
+        );
+
+        //State::create($request->all());
         return redirect()->route('state.index');
     }
 

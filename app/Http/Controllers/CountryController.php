@@ -38,7 +38,13 @@ class CountryController extends Controller
      */
     public function store(StoreCountryRequest $request)
     {
-        Country::create($request->all());
+        $input = $request->all();
+        //echo "<pre>"; print_r($input);die;
+        $country = Country::updateOrCreate(
+            ['name' => $input['name']],
+            ['name' => $input['name'], 'sortname' => $input['sortname'], 'phonecode' => $input['phonecode'], 'status' => $input['status']]
+        );
+        //Country::create($request->all());
         return redirect()->route('country.index');
     }
 

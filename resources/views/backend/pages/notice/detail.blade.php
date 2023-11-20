@@ -50,7 +50,7 @@
                                     <form method="post" action="{{route('notice.destroy',$notice['id'])}}">
                                         @method('delete')
                                         @csrf
-                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <button type="submit" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-outline-danger btn-sm">
                                             Delete <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </form>
@@ -76,7 +76,12 @@
                                         {{'Media'}}
                                     </div>
                                     <div class="col-6">
-                                        {{$notice->media ?? ''}}
+                                        @if (isset($notice->notice_image) && file_exists(public_path('uploads/' . $notice->notice_image)))
+                                            <a download="{{$notice->notice_image}}" href="/uploads/{{$notice->notice_image}}" class="btn btn-success">Download</a>
+                                            <button class="preview-button btn btn-primary" data-file="{{ $notice->notice_image }}">View</button>
+                                        @else
+                                            <span class="not-available">Not available</span>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -205,4 +210,19 @@
             });
         }
     </script>
+    
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const previewButtons = document.querySelectorAll('.preview-button');
+        
+        previewButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const fileName = this.dataset.file;
+                const fileUrl = '/uploads/' + fileName;
+                const popupWindow = window.open(fileUrl, 'File Preview', 'width=800,height=600');
+                popupWindow.focus();
+            });
+        });
+    });
+</script>
 @endsection

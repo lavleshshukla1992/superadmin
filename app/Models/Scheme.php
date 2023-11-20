@@ -10,6 +10,8 @@ class Scheme extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $perPage = 10;
+
     public $fillable = [
         'name',
         'description',
@@ -18,9 +20,16 @@ class Scheme extends Model
         'municipality_id',
         'start_at',
         'end_at',
+        'apply_link',
         'created_by',
         'updated_by',
-        'media',
-        'status'
+        'scheme_image',
+        'status',
+        'gender',
+        'social_category',
+        'educational_qualification',
+        'type_of_vending',
+        'type_of_marketplace',
+        "select_demography"
     ];
 }

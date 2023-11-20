@@ -20,7 +20,7 @@
         <div class="row align-items-center">
             <div class="col-sm-6">
                 <div class="breadcrumbs-area clearfix">
-                    <h4 class="page-title pull-left">Ads</h4>
+                    <h4 class="page-title pull-left">Feedback</h4>
                     <ul class="breadcrumbs pull-left">
                         <li><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                         <li><span>All Feedback / Enquery</span></li>
@@ -48,11 +48,12 @@
                                 <thead class="bg-light text-capitalize">
                                     <tr>
                                         <th width="2%">Sr. No</th>
-                                        <th width="5%">Name</th>
-                                        <th width="5%">Subject</th>
-                                        <th width="5%">Media</th>
-                                        <th width="5%">Message</th>
                                         <th width="5%">Type</th>
+                                        <th width="5%">Complaint Type</th>
+                                        <th width="5%">Tracking Id</th>
+                                        <th width="5%">Date</th>
+                                        <th width="5%">Subject</th>
+                                        <th width="5%">Status</th>
                                         <th width="5%">Action</th>
                                     </tr>
                                 </thead>
@@ -60,11 +61,12 @@
                                     @foreach ($feedbacks as $key=> $feedback)
                                         <tr>
                                             <td>{{ $key + 1 }}</td>
-                                            <td>{{ $feedback['name'] }}</td>
-                                            <td>{{ $feedback['subject'] }}</td>
-                                            <td>{{ $feedback['media'] }}</td>
-                                            <td>{{ $feedback['message'] }}</td>
                                             <td>{{ $feedback['type'] }}</td>
+                                            <td>{{ $feedback['complaint_type'] }}</td>
+                                            <td>{{ $feedback['id'] }}</td>
+                                            <td>{{date('Y-m-d', strtotime($feedback['created_at'])) }}</td>
+                                            <td>{{ $feedback['subject'] }}</td>
+                                            <td>{{ $feedback['status'] }}</td>
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic example">
                                                     <div class="btn-group mr-2">

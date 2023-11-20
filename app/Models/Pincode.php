@@ -10,6 +10,8 @@ class Pincode extends Model
 {
     use HasFactory,SoftDeletes;
 
+    protected $perPage = 10;
+
     public $fillable = [
         'pincode',
         'district_id',

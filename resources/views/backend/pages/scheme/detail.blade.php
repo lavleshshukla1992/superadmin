@@ -42,7 +42,7 @@
                                     <form method="post" action="{{route('scheme.destroy',$scheme['id'])}}">
                                         @method('delete')
                                         @csrf
-                                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                                        <button type="submit" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-outline-danger btn-sm">
                                             Delete <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </form>
@@ -166,10 +166,42 @@
                             </div>
                             
                         </div>
+                        <div class="row py-3">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        {{'Scheme Image'}}
+                                    </div>
+                                    <div class="col-6">
+                                        @if (isset($scheme->scheme_image) && file_exists(public_path('uploads/' . $scheme->scheme_image)))
+                                            <a download="{{$scheme->scheme_image}}" href="/uploads/{{$scheme->scheme_image}}" class="btn btn-success">Download</a>
+                                            <button class="preview-button btn btn-primary" data-file="{{ $scheme->scheme_image }}">View</button>
+                                        @else
+                                            <span class="not-available">Not available</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const previewButtons = document.querySelectorAll('.preview-button');
+        
+        previewButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                const fileName = this.dataset.file;
+                const fileUrl = '/uploads/' + fileName;
+                const popupWindow = window.open(fileUrl, 'File Preview', 'width=800,height=600');
+                popupWindow.focus();
+            });
+        });
+    });
+</script>
 @endsection

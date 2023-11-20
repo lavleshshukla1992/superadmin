@@ -9,17 +9,34 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Notice extends Model
 {
     use HasFactory, SoftDeletes;
+    protected $perPage = 10;
 
     public $fillable = [
         'name',
         'description',
-        'media',
-        'state_id',
-        'district_id',
-        'municipality_id',
+        'notice_image',
         'created_by',
         'updated_by',
         'end_date',
-        'status'
+        'select_demography',
+        'gender',
+        'social_category',
+        'educational_qualification',
+        'type_of_vending',
+        'type_of_marketplace',
+        'state_id',
+        'district_id',
+        'municipality_id',
+        'status',
     ];
+
+    protected function noticeImage(): Attribute
+    {
+        return new Attribute(
+            get: fn ($value) =>  [
+                'url' =>  !is_null($value) ? URL::to('/').'/uploads/'.$value : null,
+                'name' => $value
+            ]
+        );
+    }
 }
